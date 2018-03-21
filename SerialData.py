@@ -8,7 +8,7 @@ import struct
 def SetSerial():
     ser = serial.Serial()
     ser.baudrate = 38400  # 波特率:38400
-    ser.port = 'COM3'  # 端口:COM3
+    ser.port = 'COM5'  # 端口:COM3
     # print(ser) # 串口信息
     ser.open()  # 打开串口
     # print(ser.is_open)  # 检验串口是否打开
