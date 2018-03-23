@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import PulseWave
+import Main
 import matplotlib as mpl
 
 
@@ -20,10 +20,10 @@ def smooth(x, n=20):
     mpl.rcParams['font.sans-serif'] = [u'SimHei']
     mpl.rcParams['axes.unicode_minus'] = False
     plt.figure(facecolor='w')
-    plt.plot(np.arange(N), x, 'r-', linewidth=1, label=u'原始')
+    plt.plot(np.arange(N), x, 'c-', linewidth=1, label=u'原始')
     t = np.arange(n - 1, N)
-    plt.plot(t, x_sma, 'b-', linewidth=1, label=u'简单移动平均线')
-    plt.plot(t, x_ema, 'g-', linewidth=1, label=u'指数移动平均线')
+    plt.plot(t, x_sma, 'g-', linewidth=1, label=u'简单移动平均线')
+    plt.plot(t, x_ema, 'r-', linewidth=1, label=u'指数移动平均线')
     plt.legend(loc='upper right')
     plt.grid(True)
     plt.show()
@@ -51,6 +51,7 @@ def ft(x0):
     f = np.fft.fft(x)
     a = np.abs(f / N2)
     # plt.stem(w, a)
+    # plt.show()
 
     # 傅里叶变换(平滑后数据)
     # plt.subplot(212)
@@ -60,9 +61,9 @@ def ft(x0):
     # a = np.abs(f / N2)
     # plt.stem(w, a)
 
-    # 还原
+    # 逆变换
     f_real = np.real(f)
-    lim = 0.4
+    lim = 0.9
     eps = lim * f_real.max()
     f_real[(f_real < eps) & (f_real > -eps)] = 0
     f_imag = np.imag(f)
@@ -82,6 +83,6 @@ def ft(x0):
 
 
 if __name__ == '__main__':
-    x0 = PulseWave.DataLoad('副本5.txt')
+    x0 = Main.DataLoad('副本5.txt')
 
     ft(x0[:500, 0])

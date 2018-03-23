@@ -20,19 +20,19 @@ def DataLoad(file):
 if __name__ == '__main__':
     np.set_printoptions(suppress=True)  # 设置不以科学记数法表示
     # SerialData.ReadData(SerialData.SetSerial(), 6000)
-    x = DataLoad('data.txt')
+    x = -(DataLoad('data.txt'))
     # 静态图
     # plt.subplot(211)
     # plt.plot(x[:, 0])
     # plt.subplot(212)
-    # plt.plot(x[6001:12000, 0])
+    # plt.plot(x[500:1000, 0])
     # plt.show()
 
     # 动态图
     # DynamicWave.display(np.array(x[:, 0].flat))
 
     # 平滑
-    # SignalProcess.smooth(x[1000:3000, 0].flat)
-
+    # SignalProcess.smooth(x[1000:2000, 0].flat)
+    #
     # 傅里叶变换
-    # SignalProcess.ft(x[:3000, 0])
+    SignalProcess.ft(x[1000:2000, 0])
