@@ -26,17 +26,17 @@ def ReadDataSQL():
         cur.execute(sql)
         # 发送数据以启动
         ser.write(b'\x8a')
-        a = ser.read(2000)
+        a = ser.read(2100)
         # 循环n次取7个字节并存储
         while True:
-            # t = time.time()
+            t = time.time()
             dataB = ser.read(7)  # 取7个字节
             dataO = list(struct.unpack('BBBBBBB', bytes(dataB)))  # 转换为十进制
             val = -((dataO[1] << 16) + (dataO[2] << 8) + dataO[3])  # 还原真实数据
             data = [val] + dataO[4:]
-            print(data)
-            # sql = "insert into wavedata (time,value) value (%f,%d)" % (t, val)
-            # cur.execute(sql)
+            # print(data)
+            sql = "insert into wavedata (time,value) value (%f,%d)" % (t, val)
+            cur.execute(sql)
     finally:
         ser.write(b'\x88')  # 发送数据以停止
 
