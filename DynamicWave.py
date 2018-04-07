@@ -15,26 +15,31 @@ class Scope(object):
         self.line, = ax.plot(self.xdata, self.ydata)
         self.ax.set_xlim(0, self.rang)
 
-    def update(self, y):
-        self.ydata = self.ydata[1:]
-        sql = 'select * from wavedata where time>%s limit 1' % (self.time)
+    def update(self, frame):
+        sql = 'select * from wavedata where time>%s' % (self.time)
         self.cur.execute(sql)
-        data = self.cur.fetchall()[0]
-        self.time = data[0]
-        self.ydata = np.append(self.ydata, [data[1]], axis=0)
-        self.ax.set_ylim(self.ydata.min(), self.ydata.max())
+        num = 0
+        for item in self.cur.fetchall():
+            if (num < 3):
+                num = num + 1
+            else:
+                break
+            self.time = item[0]
+            self.ydata = np.append(self.ydata, [item[1]], axis=0)
+        self.ydata = self.ydata[num:]
         self.line.set_ydata(self.ydata)
+        self.ax.set_ylim(self.ydata.min(), self.ydata.max())
         return self.line,
 
 
-def display():
+def Display():
     fig, ax = plt.subplots()
-    plt.xticks([])
+    # plt.xticks([])
     cur = MySQL.MysqlInit()
-    scope = Scope(ax, cur, 1000)
-    ani = animation.FuncAnimation(fig, scope.update, interval=5, blit=True)
+    scope = Scope(ax, cur, rang=1000, time=0)
+    ani = animation.FuncAnimation(fig, scope.update, interval=0, blit=True)
     plt.show()
 
 
 if __name__ == '__main__':
-    display()
+    Display()
