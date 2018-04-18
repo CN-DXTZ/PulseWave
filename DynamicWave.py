@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import MySQL
+import SerialData
+import _thread
 
 
 class Scope(object):
@@ -16,14 +18,14 @@ class Scope(object):
         self.ax.set_xlim(0, self.rang)
 
     def update(self, frame):
-        sql = 'select * from wavedata where time>%s' % (self.time)
+        sql = 'select * from data11 where time>%s limit 10' % (self.time)
         self.cur.execute(sql)
         num = 0
         for item in self.cur.fetchall():
-            if (num < 3):
-                num = num + 1
-            else:
-                break
+            # if (num < 3):
+            num = num + 1
+            # else:
+            #     break
             self.time = item[0]
             self.ydata = np.append(self.ydata, [item[1]], axis=0)
         self.ydata = self.ydata[num:]
@@ -36,10 +38,11 @@ def Display():
     fig, ax = plt.subplots()
     # plt.xticks([])
     cur = MySQL.MysqlInit()
-    scope = Scope(ax, cur, rang=1000, time=0)
+    scope = Scope(ax, cur, rang=800, time=0)
     ani = animation.FuncAnimation(fig, scope.update, interval=0, blit=True)
     plt.show()
 
 
 if __name__ == '__main__':
     Display()
+

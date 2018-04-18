@@ -50,7 +50,7 @@ def ft(x0):
     w = np.arange(N2) * 2 * np.pi / N2
     f = np.fft.fft(x)
     a = np.abs(f / N2)
-    # plt.stem(w, a)
+    plt.stem(w, a)
     # plt.show()
 
     # 傅里叶变换(平滑后数据)

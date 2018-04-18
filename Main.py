@@ -21,20 +21,22 @@ def DataLoad(start=0,end=-1):
 
 if __name__ == '__main__':
     np.set_printoptions(suppress=True)  # 设置不以科学记数法表示
-    # x=DataLoad()
-    # # 静态图
-    # # plt.subplot(2    11)
-    # plt.plot(x[:])
-    # # plt.subplot(212)
-    # # plt.plot(x[500:1000, 0])
-    # plt.show()
+
+    x=DataLoad()
+
+    # 静态图
+    # plt.subplot(2    11)
+    plt.plot(x[1590:1730])
+    # plt.subplot(212)
+    # plt.plot(x[500:1000, 0])
+    plt.show()
 
     # 动态检测
-    SerialData.ReadDataToSQL()
-    DynamicWave.Display()
+    # SerialData.ReadDataToSQL()
+    # DynamicWave.Display()
 
     # 平滑
     # SignalProcess.smooth(x[1000:2000, 0].flat)
     #
     # 傅里叶变换
-    # SignalProcess.ft(x[1000:2000, 0])
+    SignalProcess.ft(x[1000:2000, 0])
