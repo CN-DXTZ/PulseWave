@@ -4,9 +4,13 @@ from sklearn import svm
 import random
 
 x = np.array(scio.loadmat("D:/cache/Matlab/项目/data.mat")["data"])
+
+# x1 = list(x[1:43.:])
+# x2 = list(x[237:, :])
+# x = np.array(x1 + x2)
 m, n = x.shape
 mTrain = int(m * 0.8)
-iter = 20
+iter = 50
 acc = 0
 for i in range(iter):
     # 打乱数据
