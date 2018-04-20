@@ -99,7 +99,7 @@ with tf.variable_scope('fullcon2') as scope:
     fullcon2 = tf.layers.dense(flatten, 1024, activation=tf.nn.relu)
 
 '''
-layer7:
+layer8:
 fullcon3: [in=(m,6,1,256)]--[flatten=(m,1536)]-->[out=(m,1024)]
 '''
 with tf.variable_scope('fullcon3') as scope:
@@ -114,15 +114,14 @@ pred = tf.argmax(output, axis=1)
 accuracy = tf.metrics.accuracy(labels=data_y, predictions=pred)[1]
 # tt = tf.reshape(data_y, [-1])
 # accuracy2 = tf.reduce_mean(pred == tt)
-optimizer = tf.train.AdamOptimizer(learning_rate=0.0005)
+optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
 train = optimizer.minimize(loss)
 
 with tf.Session() as sess:
     idx = np.array(range(x.shape[0]))
     p = int(x.shape[0] * 0.8)
     acc = 0
-    for i in range(10):
-        np.random.shuffle(idx)
+    for i in range(5):
         np.random.shuffle(idx)
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         sess.run(init)
@@ -131,13 +130,12 @@ with tf.Session() as sess:
             _, l, accTrain = sess.run([train, loss, accuracy], \
                                       feed_dict={data_x: x[idx[:p], :], data_y: y[idx[:p], :]})
             if step % 50 == 0:
-                pre, accTest, acc2 = sess.run([pred, accuracy, accuracy2], \
-                                              feed_dict={data_x: x[idx[p:], :], data_y: y[idx[p:], :]})
+                pre, accTest = sess.run([pred, accuracy], \
+                                        feed_dict={data_x: x[idx[p:], :], data_y: y[idx[p:], :]})
                 print("第", step, "代： 训练集准确率——", accTrain, "测试集准确率——", accTest)
-        print("最终测试集准确率为——", accTest)
-        print(acc2)
-        print((y[idx[p:], :]).reshape(-1))
-        print(pre)
+        print("最终第500代测试集准确率为——", accTest)
+        print("测试集实际值:\n", (y[idx[p:], :]).reshape(-1))
+        print("测试集预测值:\n", pre)
         acc = acc + accTest
 
     print("平均测试集准确率——", acc / 10)

@@ -1,5 +1,5 @@
-import random
 import numpy as np
+import tensorflow as tf
+import scipy.io as scio
 
-a=[1 ,2,3,4]
-print(len(a))
+
