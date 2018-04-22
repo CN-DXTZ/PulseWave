@@ -20,6 +20,7 @@ def bias_variable(shape):
 # 定义输入
 data_x = tf.placeholder(tf.float32, [None, 200])
 data_y = tf.placeholder(tf.int32, [None, 1])
+# 格式化输入
 input_x = tf.reshape(data_x, [-1, 200, 1, 1])  # (m,200,1,1)
 CLASS = 3
 one_hot = tf.one_hot(data_y, CLASS, 1, 0)
@@ -117,25 +118,66 @@ accuracy = tf.metrics.accuracy(labels=data_y, predictions=pred)[1]
 optimizer = tf.train.AdamOptimizer(learning_rate=0.001)
 train = optimizer.minimize(loss)
 
+# with tf.Session() as sess:
+#     idx = np.array(range(x.shape[0]))
+#     p = int(x.shape[0] * 0.8)
+#     acc = 0
+#     train_num = 3
+#
+#     for i in range(train_num):
+#         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
+#         sess.run(init)
+#         np.random.shuffle(idx)
+#         xTrain = x[idx[:p], :]
+#         yTrain = y[idx[:p], :]
+#         xTest = x[idx[p:], :]
+#         yTest = y[idx[p:], :]
+#         pre, accTrain, accTest = 0, 0, 0
+#         iter_num = 100
+#         for step in range(iter_num):
+#             _, l, accTrain = sess.run([train, loss, accuracy], feed_dict={data_x: xTrain, data_y: yTrain})
+#             pre, accTest = sess.run([pred, accuracy], feed_dict={data_x: xTest, data_y: yTest})
+#             if step % 50 == 0:
+#                 print("第", step, "代： 训练集准确率——", accTrain, "测试集准确率——", accTest)
+#
+#         print("第", iter_num, "代： 训练集准确率——", accTrain, "测试集准确率——", accTest)
+#         print("测试集实际值:\n", yTest.reshape(-1))
+#         print("测试集预测值:\n", pre)
+#         print("--------------------------------------------------------------------------")
+#
+#         acc = acc + accTest
+#
+#     print("平均测试集准确率——", acc / train_num)
+
 with tf.Session() as sess:
     idx = np.array(range(x.shape[0]))
     p = int(x.shape[0] * 0.8)
     acc = 0
-    for i in range(5):
-        np.random.shuffle(idx)
+    train_num = 3
+    for i in range(train_num):
         init = tf.group(tf.global_variables_initializer(), tf.local_variables_initializer())
         sess.run(init)
-        pre, accTest = 0, 0
-        for step in range(500):
-            _, l, accTrain = sess.run([train, loss, accuracy], \
-                                      feed_dict={data_x: x[idx[:p], :], data_y: y[idx[:p], :]})
-            if step % 50 == 0:
-                pre, accTest = sess.run([pred, accuracy], \
-                                        feed_dict={data_x: x[idx[p:], :], data_y: y[idx[p:], :]})
-                print("第", step, "代： 训练集准确率——", accTrain, "测试集准确率——", accTest)
-        print("最终第500代测试集准确率为——", accTest)
-        print("测试集实际值:\n", (y[idx[p:], :]).reshape(-1))
+        np.random.shuffle(idx)
+        xTrain = x[idx[:p], :]
+        yTrain = y[idx[:p], :]
+        xTest = x[idx[p:], :]
+        yTest = y[idx[p:], :]
+        pre, accTrain, accTest, accTest0, step = 0, 0, 0, 0, 0
+        while True:
+            step = step + 1
+            _, l, accTrain = sess.run([train, loss, accuracy], feed_dict={data_x: xTrain, data_y: yTrain})
+            pre, accTest = sess.run([pred, accuracy], feed_dict={data_x: xTest, data_y: yTest})
+            if step % 100 == 1:
+                if (accTest > accTest0):
+                    accTest0 = accTest
+                    print("第", step, "代： 训练集准确率——", accTrain, "测试集准确率——", accTest)
+                else:
+                    break
+
+        print("测试集实际值:\n", yTest.reshape(-1))
         print("测试集预测值:\n", pre)
+        print("--------------------------------------------------------------------------")
+
         acc = acc + accTest
 
-    print("平均测试集准确率——", acc / 10)
+    print("平均测试集准确率——", acc / train_num)

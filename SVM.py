@@ -2,6 +2,7 @@ import scipy.io as scio
 import numpy as np
 from sklearn import svm
 import random
+from sklearn.model_selection import cross_val_score
 
 x = np.array(scio.loadmat("D:/cache/Matlab/项目/data.mat")["data"])
 
@@ -10,9 +11,9 @@ x = np.array(scio.loadmat("D:/cache/Matlab/项目/data.mat")["data"])
 # x = np.array(x1 + x2)
 m, n = x.shape
 mTrain = int(m * 0.8)
-iter = 50
-acc = 0
-for i in range(iter):
+iter_num = 50
+accTrain, accTest = 0, 0
+for i in range(iter_num):
     # 打乱数据
     x = x[random.sample(range(m), m), :]
     xTrain = x[:mTrain, :-1]
@@ -21,11 +22,16 @@ for i in range(iter):
     yTest = x[mTrain:, -1]
 
     # 调用SVC()
-    clf = svm.SVC()
+    clf = svm.SVC(class_weight='balanced')
     # fit()训练
     clf.fit(xTrain, yTrain)
-    # predict()预测
-    yPred = clf.predict(xTest)
-    # 准确率：
-    acc = acc + np.sum(yPred == (yTest))
-print(acc / iter / len(yTest))
+
+    # 训练集准确率
+    yPredTrain = clf.predict(xTrain)
+    accTrain = accTrain + np.sum(yPredTrain == (yTrain)) / len(yTrain)
+
+    # 测试集准确率
+    yPredTest = clf.predict(xTest)
+    accTest = accTest + np.sum(yPredTest == (yTest)) / len(yTest)
+
+print("训练集准确率——", accTrain / iter_num, "测试集准确率——", accTest / iter_num)
