@@ -1,18 +1,18 @@
 # 从串口数据读取
 import serial
+import serial.tools.list_ports
 import struct
 import MySQL
 import time
+import multiprocessing
+import DynamicWave
 
 
 # 设置串口
 def SetSerial():
-    ser = serial.Serial()
-    ser.baudrate = 38400  # 波特率:38400
-    ser.port = 'COM6'  # 端口
-    # print(ser) # 串口信息
-    ser.open()  # 打开串口
-    # print(ser.is_open)  # 检验串口是否打开
+    plist = list(serial.tools.list_ports.comports())
+    ser = serial.Serial(plist[0][0], baudrate=38400)
+    # print(ser)  # 串口信息
     ser.write(b'\x88')
     return ser
 
@@ -38,8 +38,7 @@ def ReadDataToSQL(index):
                 temp = val
             if (val > 5 * temp):
                 break
-            # print(val)
-        # print("-----------------------------------")
+        multiprocessing.Process(target=DynamicWave.Display, args=(index,)).start()
         # 循环n次取7个字节并存储
         t = 0
         while True:
@@ -56,5 +55,4 @@ def ReadDataToSQL(index):
 
 
 if __name__ == '__main__':
-    # SetSerial()
     ReadDataToSQL(11)
