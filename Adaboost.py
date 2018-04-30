@@ -5,11 +5,11 @@ from sklearn.ensemble import AdaBoostClassifier
 import random
 from sklearn import svm
 
-x = np.array(scio.loadmat("D:/cache/Matlab/项目/data.mat")["data"])
+# x = np.array(scio.loadmat("D:/cache/Matlab/项目/data.mat")["data"])
+x = np.array(scio.loadmat("D:/cache/Matlab/项目/xSpilit.mat")["xSpilit"])  # (m, 200)
+y = np.array(scio.loadmat("D:/cache/Matlab/项目/yTrain.mat")["yTrain"])  # (m, 1)
+x = np.column_stack((x, y))
 
-# x1 = list(x[1:43.:])
-# x2 = list(x[237:, :])
-# x = np.array(x1 + x2)
 m, n = x.shape
 mTrain = int(m * 0.8)
 iter_num = 10

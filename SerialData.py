@@ -9,7 +9,7 @@ import time
 def SetSerial():
     ser = serial.Serial()
     ser.baudrate = 38400  # 波特率:38400
-    ser.port = 'COM4'  # 端口
+    ser.port = 'COM6'  # 端口
     # print(ser) # 串口信息
     ser.open()  # 打开串口
     # print(ser.is_open)  # 检验串口是否打开
