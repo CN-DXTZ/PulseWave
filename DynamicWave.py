@@ -7,7 +7,7 @@ import _thread
 
 
 class Scope(object):
-    def __init__(self, ax, cur, index, rang=400, time=0):
+    def __init__(self, ax, cur, tableName, rang=400, time=0):
         self.rang = rang
         self.ax = ax
         self.cur = cur
@@ -16,10 +16,10 @@ class Scope(object):
         self.ydata = np.array(np.zeros(self.rang))
         self.line, = ax.plot(self.xdata, self.ydata)
         self.ax.set_xlim(0, self.rang)
-        self.index = index
+        self.tableName = tableName
 
     def update(self, frame):
-        sql = 'select * from data%d where time>%s limit 10' % (self.index, self.time)
+        sql = 'select * from %s where time>%s limit 10' % (self.tableName, self.time)
         self.cur.execute(sql)
         num = 0
         for item in self.cur.fetchall():
@@ -35,11 +35,11 @@ class Scope(object):
         return self.line,
 
 
-def Display(index):
+def Display(tableName):
     fig, ax = plt.subplots()
     # plt.xticks([])
     cur = MySQL.MysqlInit()
-    scope = Scope(ax, cur, index, rang=800, time=0)
+    scope = Scope(ax, cur, tableName, rang=800, time=0)
     ani = animation.FuncAnimation(fig, scope.update, interval=0, blit=True)
     plt.show()
 

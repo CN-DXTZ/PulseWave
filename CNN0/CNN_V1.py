@@ -107,7 +107,7 @@ with tf.variable_scope('fullcon3') as scope:
     output = tf.layers.dense(flatten, 3)
 
 # 定义优化
-# loss = tf.losses.softmax_cross_entropy(labels=input_y, logits=output)
+# loss = tf.losses.softmax_cross_entropy(onehot_labels=input_y, logits=output)
 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output, labels=input_y))
 # 返回局部变量: accuracy和update_operation
 # 注意初始化局部变量

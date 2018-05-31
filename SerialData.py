@@ -17,14 +17,14 @@ def SetSerial():
     return ser
 
 
-def ReadDataToSQL(index):
+def ReadDataToSQL(tableName):
     ser = SetSerial()
     cur = MySQL.MysqlInit()
     time.sleep(1)
     try:
-        sql = "drop table if exists data%d" % index
+        sql = "drop table if exists %s" % tableName
         cur.execute(sql)
-        sql = "create table data%d (time int, value int)" % index
+        sql = "create table %s (time int, value int)" % tableName
         cur.execute(sql)
         # 发送数据以启动
         ser.write(b'\x8a')
@@ -38,7 +38,7 @@ def ReadDataToSQL(index):
                 temp = val
             if (val > 5 * temp):
                 break
-        multiprocessing.Process(target=DynamicWave.Display, args=(index,)).start()
+        multiprocessing.Process(target=DynamicWave.Display, args=(tableName,)).start()
         # 循环n次取7个字节并存储
         t = 0
         while True:
@@ -48,11 +48,11 @@ def ReadDataToSQL(index):
             val = ((dataO[1] << 16) + (dataO[2] << 8) + dataO[3])  # 还原真实数据
             # data = [val] + dataO[4:]
             # print(val)
-            sql = "insert into data%d (time,value) value (%d,%d)" % (index, t, -val)
+            sql = "insert into %s (time,value) value (%d,%d)" % (tableName, t, -val)
             cur.execute(sql)
     finally:
         ser.write(b'\x88')  # 发送数据以停止
 
 
 if __name__ == '__main__':
-    ReadDataToSQL(11)
+    ReadDataToSQL("dengbin_20180531_01")
