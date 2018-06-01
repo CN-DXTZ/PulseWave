@@ -19,7 +19,7 @@ class Scope(object):
         self.tableName = tableName
 
     def update(self, frame):
-        sql = 'select * from %s where time>%s limit 10' % (self.tableName, self.time)
+        sql = 'select * from %s where time>%s limit 20' % (self.tableName, self.time)
         self.cur.execute(sql)
         num = 0
         for item in self.cur.fetchall():
@@ -41,8 +41,9 @@ def Display(tableName):
     cur = MySQL.MysqlInit()
     scope = Scope(ax, cur, tableName, rang=800, time=0)
     ani = animation.FuncAnimation(fig, scope.update, interval=0, blit=True)
+    print(tableName, ' start display')
     plt.show()
 
 
 if __name__ == '__main__':
-    Display(11)
+    Display("")
