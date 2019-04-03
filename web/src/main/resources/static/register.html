@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>亚健康守护注册</title>
+</head>
+<body>
+<form action="registerRequest" method="post">
+    账户: <input type="text" name="username"/><br/>
+    密码: <input type="password" name="password"/><br/>
+    年龄: <input type="text" name="age"/><br/>
+    身份: <select name="identity">
+    <option value="0">用户</option>
+    <option value="1">医师</option>
+</select><br/>
+    <input type="submit" value="注册"/><br/>
+</form>
+<button onclick="location.href='login'">返回登录</button>
+</body>
+</html>
