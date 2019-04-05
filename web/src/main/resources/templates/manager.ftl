@@ -13,6 +13,7 @@ ${information}<br/><br/>
     </#list>
 </span>
 
+<button onclick="location.href='login'">注销</button><br/>
 
 </body>
 </html>

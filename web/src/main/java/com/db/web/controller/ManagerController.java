@@ -35,10 +35,6 @@ public class ManagerController {
                 put("target", "查看数据");
                 put("target_url", "display");
             }});
-            managerList.add(new HashMap<String, String>() {{
-                put("target", "注销");
-                put("target_url", "login");
-            }});
         } else { // 医师
 
         }
