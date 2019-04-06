@@ -24,7 +24,6 @@ public class ManagerController {
         modelAndView.setViewName("manager");
         User user = userService.selectUser_id(hrbustID);
         modelAndView.addObject("information", "你好，" + user.getUsername());
-        System.out.println(hrbustIdentity);
         List managerList = new ArrayList();
         if (hrbustIdentity.equals("0")) { // 病人
             managerList.add(new HashMap<String, String>() {{

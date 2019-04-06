@@ -15,7 +15,6 @@ public class WaveServiceImpl implements WaveService {
     @Override
     public List<Wave> getAllWave(String hrbustID) {
         String s = "wave_" + hrbustID;
-        System.out.println(s);
         return waveMapper.getAllWave(hrbustID);
     }
 
