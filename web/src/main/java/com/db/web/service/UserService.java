@@ -5,11 +5,15 @@ import com.db.web.entity.User;
 
 public interface UserService {
 
-    User getUser_username(User user);
+    // 根据username获得user
+    User selectUser_username(User user);
 
-    User selectUser_id(String hrbustID);
+    // 根据id获得user
+    User selectUser_id(String id);
 
+    // 登录
     int login(User user);
 
+    // 注册
     int register(User user);
 }

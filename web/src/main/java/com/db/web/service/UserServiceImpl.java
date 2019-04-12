@@ -13,23 +13,27 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
+    // 插入用户
     private void insertUser(User user) {
         userMapper.insertUser(user);
     }
 
+    // 根据username获得user
     @Override
-    public User getUser_username(User user) {
+    public User selectUser_username(User user) {
         return userMapper.selectUser_username(user);
     }
 
+    // 根据id获得user
     @Override
-    public User selectUser_id(String hrbustID) {
-        return userMapper.selectUser_id(hrbustID);
+    public User selectUser_id(String id) {
+        return userMapper.selectUser_id(id);
     }
 
+    // 登录
     @Override
     public int login(User user) {
-        User curr_user = getUser_username(user);
+        User curr_user = selectUser_username(user);
         if (curr_user == null)
             return 2; // 用户不存在
         else if (curr_user.getPassword().equals(user.getPassword()))
@@ -38,15 +42,16 @@ public class UserServiceImpl implements UserService {
             return 1; // 密码不正确
     }
 
+    // 注册
     @Resource
     JdbcTemplate jdbcTemplate;
 
     @Override
     public int register(User user) {
-        User curr_user = getUser_username(user);
+        User curr_user = selectUser_username(user);
         if (curr_user == null) { // 用户不存在
             insertUser(user);
-            Integer id = getUser_username(user).getId();
+            Integer id = selectUser_username(user).getId();
             if (user.getIdentity()) // 创建医师信息表
             {
                 /**

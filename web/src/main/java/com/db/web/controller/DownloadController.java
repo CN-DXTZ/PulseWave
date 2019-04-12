@@ -1,36 +1,37 @@
 package com.db.web.controller;
 
-import com.db.web.entity.User;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.db.web.entity.Wave;
-import com.db.web.service.UserService;
 import com.db.web.service.WaveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-public class DisplayController {
-    @Autowired
-    UserService userService;
+@RestController
+public class DownloadController {
+
     @Autowired
     WaveService waveService;
 
-    // 显示数据界面
-    @GetMapping(value = "/display")
-    public ModelAndView display(ModelAndView modelAndView,
-                                @CookieValue(value = "hrbustID") String hrbustID) {
-        modelAndView.setViewName("wave");
-        User user = userService.selectUser_id(hrbustID);
-        modelAndView.addObject("information", user.getUsername() + "波形数据");
+    // 下载请求
+    @CrossOrigin(origins = "*")
+    @GetMapping(value = "/downloadRequest", params = {"id", "startTime", "endTime"})
+    public String downloadRequest(@RequestParam(value = "id") String id,
+                                  @RequestParam(value = "startTime") String startTime,
+                                  @RequestParam(value = "endTime") String endTime) {
+        JSONObject back = new JSONObject();
 
-        // 获取所有数据并传入 wave.ftl
-        List<Wave> waveList = waveService.getAllWave(hrbustID);
-        modelAndView.addObject("waveList", waveList);
+        List<Wave> waveList = waveService.selectWave_timeRange(id, startTime, endTime);
 
-        return modelAndView;
+        back.put("success", "true");
+
+        // List<Wave>转JSONArray
+        JSONArray waveJSONArray = new JSONArray();
+        waveJSONArray.addAll(waveList);
+        back.put("wave", waveJSONArray);
+
+        return back.toJSONString();
     }
 }
