@@ -1,6 +1,6 @@
 ﻿1. 登录
 /loginRequest
-POST        form-data   username、password、
+POST        form-data   username、password
 
 Request     1.成功      {"success":"true","message":"{\"age\":22,\"id\":1,\"identity\":false,\"password\":\"1234\",\"username\":\"dengbin\"}"}
                           用户信息message为：{"age":22,"id":1,"identity":false,"password":"1234","username":"dengbin"}
