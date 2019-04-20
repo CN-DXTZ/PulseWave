@@ -5,7 +5,7 @@
 
 
 #define FOSC 11059200L		//晶振
-#define BAUD 38400			//波特率
+#define BAUD 9600			//波特率
 
 #define S2RI 0x01	     // 串口2接收中断请求标志位
 #define S2TI 0x02	     // 串口2发送中断请求标志位

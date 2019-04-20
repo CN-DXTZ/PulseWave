@@ -70,48 +70,48 @@ void Uart1_Interrupt() interrupt 4 using 1
     if (RI)//接收中断标志
     {
         RI = 0;				//清除RI接收中断标志
-		//Uart1_SendChar(receive);//发送接收到的数
+		Uart1_SendChar(receive);//发送接收到的数
 		
 		switch(receive)
 		{
-			case 0x01:
+			case 0x31: //'1'
 			{
 				state=0;
 				Pulse_Stop();
-				Uart1_SendString("已关闭所有传感器\r\n");			
+				Uart1_SendString("--Close All Sensor\r\n");			
 				break;
 			}
-			case 0x02:
+			case 0x32: //'2'
 			{
 				state=1;
 				Pulse_Start();
-				Uart1_SendString("已打开所有传感器\r\n");
+				Uart1_SendString("--Open All Sensor\r\n");
 				break;
 			}
-			case 0x03:
+			case 0x33: //'3'
 			{
 				state=2;
-				Uart1_SendString("已打开Triaxial\r\n");
+				Uart1_SendString("--Only Open Triaxial\r\n");
 				break;
 			}
-			case 0x04:
+			case 0x34: //'4'
 			{
 				state=0;
-				Uart1_SendString("已关闭Triaxial\r\n");
+				Uart1_SendString("--Only Open Triaxial\r\n");
 				break;
 			}				
-			case 0x05:
+			case 0x35: //'5'
 			{
 				state=3;
 				Pulse_Start();
-				Uart1_SendString("已打开Pulse\r\n");
+				Uart1_SendString("--Only Open Pulse\r\n");
 				break;
 			}			
-			case 0x06:
+			case 0x36: //'6'
 			{
 				state=0;
 				Pulse_Stop();
-				Uart1_SendString("已关闭Pulse\r\n");
+				Uart1_SendString("--Only Close Pulse\r\n");
 				break;
 			}				
 		}
