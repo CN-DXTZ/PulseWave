@@ -1,5 +1,6 @@
-package com.db.android.fregment;
+package com.db.app.fregment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.db.android.R;
+import com.db.app.R;
+import com.db.app.entity.User;
+import com.db.app.service.SharedPreferencesService;
 
 public class Bluetooth extends Fragment {
     private Button button_connect_bluetooth;
@@ -28,7 +31,11 @@ public class Bluetooth extends Fragment {
         button_connect_bluetooth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "连接蓝牙", Toast.LENGTH_SHORT).show();
+                SharedPreferencesService sharedPreferencesService = new SharedPreferencesService();
+                sharedPreferencesService.setSp(getActivity().getApplicationContext()
+                        .getSharedPreferences("config", Context.MODE_PRIVATE));
+                User currUser = sharedPreferencesService.readUser();
+                Toast.makeText(getActivity(), currUser.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }

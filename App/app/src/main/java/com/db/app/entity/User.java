@@ -1,4 +1,4 @@
-package com.db.android.entity;
+package com.db.app.entity;
 
 public class User {
     private Integer id;

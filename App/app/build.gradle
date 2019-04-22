@@ -3,12 +3,17 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.db.android"
+        applicationId "com.db.app"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
     buildTypes {
         release {
@@ -16,6 +21,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
 
 dependencies {
@@ -28,7 +34,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    //    implementation 'com.squareup.okhttp3:okhttp:3.3.1'
+
+//    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+//    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.zhy:okhttputils:2.6.2'
+//    implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.alibaba:fastjson:1.1.70.android'
 }

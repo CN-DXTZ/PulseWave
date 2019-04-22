@@ -2,12 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_about"
-        android:orderInCategory="0"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/about" />
-
-    <item
         android:id="@+id/nav_bluetooth"
         android:orderInCategory="1"
         android:icon="@drawable/ic_dashboard_black_24dp"
@@ -17,6 +11,12 @@
         android:id="@+id/nav_web"
         android:orderInCategory="2"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/web" />
+        android:title="@string/server" />
+
+    <item
+        android:id="@+id/nav_aboutMe"
+        android:orderInCategory="0"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/AboutMe" />
 
 </menu>

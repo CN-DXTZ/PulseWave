@@ -20,10 +20,25 @@
         android:hint="请输入您的密码"
         android:inputType="textPassword" />
 
+    <CheckBox
+        android:id="@+id/isRemember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="记住密码" />
+
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="12dp"
         android:text="登录" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="注册" />
 
 </LinearLayout>

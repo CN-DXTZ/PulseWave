@@ -1,4 +1,4 @@
-package com.db.android.activity;
+package com.db.app;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,17 +7,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.db.android.R;
-import com.db.android.fregment.About;
-import com.db.android.fregment.Bluetooth;
-import com.db.android.fregment.FragmentAdapter;
-import com.db.android.fregment.Server;
+import com.db.app.R;
+import com.db.app.fregment.AboutMe;
+import com.db.app.fregment.Bluetooth;
+import com.db.app.fregment.FragmentAdapter;
+import com.db.app.fregment.Server;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private ViewPager viewPager;
 
-    private About about = new About();
+    private AboutMe aboutMe = new AboutMe();
     private Bluetooth bluetooth = new Bluetooth();
     private Server web = new Server();
 
@@ -45,5 +45,4 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
-
 }

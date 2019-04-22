@@ -1,4 +1,4 @@
-package com.db.android.fregment;
+package com.db.app.fregment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +13,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new About();
+            return new AboutMe();
         } else if (position == 1) {
             return new Bluetooth();
         } else {

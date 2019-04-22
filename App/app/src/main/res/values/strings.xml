@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">亚健康守护</string>
-    
-    <string name="about">关于</string>
+
+    <string name="AboutMe">关于我</string>
     <string name="bluetooth">蓝牙</string>
-    <string name="web">服务器</string>
+    <string name="server">服务器</string>
 </resources>
