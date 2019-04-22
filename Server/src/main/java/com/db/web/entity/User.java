@@ -16,8 +16,15 @@ public class User {
     private Integer id;
     private String username;
     private String password;
+    private Boolean gender; // false为男 true位女
     private Integer age;
-    private Boolean identity; // 0为用户 1为医师
+    private String name;
+    private float height;
+    private float weight;
+    private String phone;
+    private Boolean identity; // false为用户 true为医师
+
+
 }
 
 

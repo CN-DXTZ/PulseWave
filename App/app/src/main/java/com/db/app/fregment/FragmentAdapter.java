@@ -13,11 +13,11 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new AboutMe();
-        } else if (position == 1) {
             return new Bluetooth();
-        } else {
+        } else if (position == 1) {
             return new Server();
+        } else {
+            return new AboutMe();
         }
     }
 

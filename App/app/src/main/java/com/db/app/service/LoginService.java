@@ -32,7 +32,7 @@ public class LoginService {
                             JSONObject jsonUser = jsonRoot.getJSONObject("message");
                             User currUser = JSONObject.toJavaObject(jsonUser, User.class);
                             System.out.println(currUser);
-                            sharedPreferencesService.writeUserConfig(currUser);
+                            sharedPreferencesService.writeUser(currUser);
                         } else {
                             if (jsonRoot.getString("message").equals("error"))
                                 Toast.makeText(fa, "密码错误", Toast.LENGTH_SHORT).show();

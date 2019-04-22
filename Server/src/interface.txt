@@ -13,7 +13,15 @@ Request     1.成功      {"success":"true","message":"{\"age\":22,\"id\":1,\"id
 
 2. 注册
 /registerRequest
-POST        form-data   username、password、age、identity
+POST        form-data   username	varchar
+			password	varchar
+			gender		bit		// false为男 true位女
+			age		int		 
+			name		varchar
+			height		double
+			weight		double
+			phone		varchar
+			identity	bit		// false为用户 true为医师
 
 Request     1.成功      {"success":"true"}
             2.已存在    {"success":"false"}
@@ -33,13 +41,12 @@ Request     1.成功      {"success":"true"}
 
 4. 下载数据
 /downloadRequest
-/downloadRequest?id=1&startTime=6&endTime=9
+/downloadRequest?id=4&startTime=6&endTime=9
 GET         params id=1 startTime=6 endTime=9
             其中id用于表示上传的用户
             [startTime,endTime]为起止时间
 
 Request     1.成功    {"success":"true","wave":[{"time":6,"value":"167"},{"time":7,"value":"312"},{"time":8,"value":"156"}]}
-                        其中id用于表示上传的用户
                           wave为一个Array的脉搏波数据
 
 
