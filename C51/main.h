@@ -12,6 +12,7 @@
 #include "uart.h"
 #include "gy_521.h"
 #include "pulse.h"
+#include "bluetooth.h"
 
 
 #define u8 unsigned char  

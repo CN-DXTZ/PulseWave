@@ -5,7 +5,6 @@ sbit    SCL=P1^5;		//IIC时钟引脚定义
 sbit    SDA=P1^4;		//IIC数据引脚定义
 
 
-
 //************************************************************************
 //									I2C
 //************************************************************************
@@ -124,29 +123,46 @@ void MPU6050_Init()
 	Single_WriteI2C(GYRO_CONFIG, 0x18);
 	Single_WriteI2C(ACCEL_CONFIG, 0x01);
 	
-	Uart1_SendString("Triaxial 已初始化\r\n");
+	Uart1_SendString("Triaxial Initial\r\n");
 }
 
 //合成数据
-int MPU6050_GetData(u8 REG_Address)
-{
-	u8 H,L;
-	H=Single_ReadI2C(REG_Address);
-	L=Single_ReadI2C(REG_Address+1);
-	return ((H<<8)+L);   //合成数据
-}
+//int MPU6050_GetData(u8 REG_Address)
+//{
+//	u8 H,L;
+//	H=Single_ReadI2C(REG_Address);
+//	L=Single_ReadI2C(REG_Address+1);
+//	return ((H<<8)+L);   //合成数据
+//}
 
 //显示数据
-void MPU6050_Display()
+//void MPU6050_Display()
+//{
+//	Uart1_SendString("Triaxial: ");
+//	Uart1_SendInt(MPU6050_GetData(ACCEL_XOUT_H));		//显示X轴加速度
+//	Uart1_SendInt(MPU6050_GetData(ACCEL_YOUT_H));		//显示Y轴加速度
+//	Uart1_SendInt(MPU6050_GetData(ACCEL_ZOUT_H));		//显示Z轴加速度
+//	Uart1_SendInt(MPU6050_GetData(GYRO_XOUT_H));		//显示X轴角速度
+//	Uart1_SendInt(MPU6050_GetData(GYRO_YOUT_H));		//显示Y轴角速度
+//	Uart1_SendInt(MPU6050_GetData(GYRO_ZOUT_H));		//显示Z轴角速度
+//	Uart1_SendString("\r\n");
+//}
+
+extern u8 send[];	// 存储一个要发送的蓝牙数据包
+void MPU6050_Store()
 {
-	Uart1_SendString("Triaxial: ");
-	Uart1_SendInt(MPU6050_GetData(ACCEL_XOUT_H));		//显示X轴加速度
-	Uart1_SendInt(MPU6050_GetData(ACCEL_YOUT_H));		//显示Y轴加速度
-	Uart1_SendInt(MPU6050_GetData(ACCEL_ZOUT_H));		//显示Z轴加速度
-	Uart1_SendInt(MPU6050_GetData(GYRO_XOUT_H));		//显示X轴角速度
-	Uart1_SendInt(MPU6050_GetData(GYRO_YOUT_H));		//显示Y轴角速度
-	Uart1_SendInt(MPU6050_GetData(GYRO_ZOUT_H));		//显示Z轴角速度
-	Uart1_SendString("\r\n");
+	send[31]=Single_ReadI2C(ACCEL_XOUT_H);
+	send[32]=Single_ReadI2C(ACCEL_XOUT_L);
+	send[33]=Single_ReadI2C(ACCEL_YOUT_H);
+	send[34]=Single_ReadI2C(ACCEL_YOUT_L);
+	send[35]=Single_ReadI2C(ACCEL_ZOUT_H);
+	send[36]=Single_ReadI2C(ACCEL_ZOUT_L);
+	send[37]=Single_ReadI2C(GYRO_XOUT_H);
+	send[38]=Single_ReadI2C(GYRO_XOUT_L);
+	send[39]=Single_ReadI2C(GYRO_YOUT_H);
+	send[40]=Single_ReadI2C(GYRO_YOUT_L);
+	send[41]=Single_ReadI2C(GYRO_ZOUT_H);
+	send[42]=Single_ReadI2C(GYRO_ZOUT_L);
 }
 
 

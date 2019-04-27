@@ -1,7 +1,7 @@
 /***********************************************************************
 引脚定义：串行口1：接收———RxD/P3.0		发送————TxD/P3.1； 
           串行口2：接收———RxD2/P1.2		发送————TxD2/P1.3；
-功能描述：串行口1：和电脑通信
+功能描述：串行口1：和电脑/蓝牙通信
           串行口2：和脉搏波传感器通信
 ***********************************************************************/
 #include "uart.h"
@@ -9,7 +9,7 @@
 
 //**********变量声明************
 extern u8 state;	//外部状态变量
-u8 Pulse_state=0;	//记录脉搏波数据在每组的第几位
+
 
 
 
@@ -26,13 +26,11 @@ void Uart1_Init()		//38400bps@11.0592MHz
 	TMOD &= 0x0F;		//清除定时器1模式位
 	TMOD |= 0x20;		//设定定时器1为8位自动重装方式
 	
-	TH1 = TL1 = -(FOSC/32/BAUD); //设定定时器初值和重装值
+	TH1 = TL1 = -(FOSC/32/BAUD1); //设定定时器初值和重装值
 	
 	ES = 1;			//允许串口1中断
 	ET1 = 0;		//禁止定时器1中断
 	TR1 = 1;		//启动定时器1
-	
-	Uart1_SendString("串口通信1已初始化\r\n");
 }
 // 串口2初始化
 void Uart2_Init()		//38400bps@11.0592MHz
@@ -40,11 +38,9 @@ void Uart2_Init()		//38400bps@11.0592MHz
 	AUXR &= 0xF7;		//波特率不倍速
 	S2CON = 0x50;		//8位数据,可变波特率
 	AUXR |= 0x04;		//独立波特率发生器时钟为Fosc,即1T
-	BRT = -(FOSC/32/BAUD);;			//设定独立波特率发生器重装值
+	BRT = -(FOSC/32/BAUD2);			//设定独立波特率发生器重装值
 	AUXR |= 0x10;		//启动独立波特率发生器
 	IE2 = 0x00;         //关串口2中断（0x01开）
-	
-	Uart1_SendString("串口通信2已初始化\r\n");
 }
 // 全部串口通信初始化
 void Uart_Init()		//38400bps@11.0592MHz
@@ -54,7 +50,7 @@ void Uart_Init()		//38400bps@11.0592MHz
 	ES=1;			//打开接收中断
 	EA=1;			//打开总中断
 	
-	Uart1_SendString("串口通信已全部初始化\r\n");
+	Uart1_SendString("Uart Initial\r\n");
 }
 
 
@@ -70,50 +66,24 @@ void Uart1_Interrupt() interrupt 4 using 1
     if (RI)//接收中断标志
     {
         RI = 0;				//清除RI接收中断标志
-		Uart1_SendChar(receive);//发送接收到的数
+//		Uart1_SendChar(receive);//发送接收到的数
 		
 		switch(receive)
 		{
-			case 0x31: //'1'
+			case 0x31: // 停止
 			{
 				state=0;
 				Pulse_Stop();
-				Uart1_SendString("--Close All Sensor\r\n");			
+				Uart1_SendString("stop\r\n");			
 				break;
 			}
-			case 0x32: //'2'
+			case 0x32: // 开始
 			{
 				state=1;
 				Pulse_Start();
-				Uart1_SendString("--Open All Sensor\r\n");
+				Uart1_SendString("start\r\n");
 				break;
 			}
-			case 0x33: //'3'
-			{
-				state=2;
-				Uart1_SendString("--Only Open Triaxial\r\n");
-				break;
-			}
-			case 0x34: //'4'
-			{
-				state=0;
-				Uart1_SendString("--Only Open Triaxial\r\n");
-				break;
-			}				
-			case 0x35: //'5'
-			{
-				state=3;
-				Pulse_Start();
-				Uart1_SendString("--Only Open Pulse\r\n");
-				break;
-			}			
-			case 0x36: //'6'
-			{
-				state=0;
-				Pulse_Stop();
-				Uart1_SendString("--Only Close Pulse\r\n");
-				break;
-			}				
 		}
     }
 }
@@ -126,9 +96,11 @@ void Uart1_Interrupt() interrupt 4 using 1
 //第4字节：心率
 //第5字节：血氧饱和度
 //第6字节：收缩压
-//u8 Pulse_state=0;	//记录当前为每组数据的第几位
 //
 // 串行口2中断：根据接收到的数字读取脉搏波传感器数据
+extern u8 send[];	// 存储一个要发送的蓝牙数据包
+u8 Pulse_state=3;	//记录读取的脉搏波数据在每组的第几位
+u8 Pulse_num=0;		//记录脉搏波数据存储的数量
 void Uart2_Interrupt() interrupt 8 using 2
 {
 	u8 receive=S2BUF;		//存储接收到的数
@@ -136,15 +108,22 @@ void Uart2_Interrupt() interrupt 8 using 2
     {
         S2CON &= ~S2RI;			//清除接收中断标志
 		
-		if(receive==0xff)	//数据头
+		if(Pulse_state==3 && receive==0xff)	//数据头
 		{
-			Uart1_SendChar(receive);
-			Pulse_state=1;
+			Pulse_state=0;
 		}
-		else if(Pulse_state<=3)//原始数据
+		else if(Pulse_state<3)//原始数据
 		{
-			Uart1_SendChar(receive);
+			send[Pulse_num]=receive;
 			Pulse_state++;
+			Pulse_num++;
+						
+			// 10个脉搏波读取完
+			if(Pulse_num==30) 
+			{
+				Pulse_num=1;
+				state=2;
+			}
 		}
     }
 }

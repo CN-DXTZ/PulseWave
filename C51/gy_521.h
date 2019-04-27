@@ -39,8 +39,9 @@ void  Delay5us();					//延迟5微秒
 
 //********************************MPU6050***************************************************
 void  MPU6050_Init();								//MPU6050初始化
-int   MPU6050_GetData(unsigned char REG_Address);	//合成数据
-void  MPU6050_Display();				//显示数据
+//int   MPU6050_GetData(unsigned char REG_Address);	//合成数据
+//void  MPU6050_Display();				//显示数据
+void  MPU6050_Store();					//存储数据
 	
 //********************************I2C***************************************************
 void  I2C_Start();
