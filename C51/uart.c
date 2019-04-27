@@ -81,7 +81,7 @@ void Uart1_Interrupt() interrupt 4 using 1
 			{
 				state=1;
 				Pulse_Start();
-				Uart1_SendString("start\r\n");
+//				Uart1_SendString("start\r\n");
 				break;
 			}
 		}
@@ -97,10 +97,10 @@ void Uart1_Interrupt() interrupt 4 using 1
 //第5字节：血氧饱和度
 //第6字节：收缩压
 //
-// 串行口2中断：根据接收到的数字读取脉搏波传感器数据
+// 串行口2中断：根据接收到的数字存储脉搏波传感器数据
 extern u8 send[];	// 存储一个要发送的蓝牙数据包
 u8 Pulse_state=3;	//记录读取的脉搏波数据在每组的第几位
-u8 Pulse_num=0;		//记录脉搏波数据存储的数量
+u8 Pulse_num=1;		//记录脉搏波数据存储的数量
 void Uart2_Interrupt() interrupt 8 using 2
 {
 	u8 receive=S2BUF;		//存储接收到的数
@@ -119,7 +119,7 @@ void Uart2_Interrupt() interrupt 8 using 2
 			Pulse_num++;
 						
 			// 10个脉搏波读取完
-			if(Pulse_num==30) 
+			if(Pulse_num==31) 
 			{
 				Pulse_num=1;
 				state=2;
