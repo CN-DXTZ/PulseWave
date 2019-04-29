@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="请输入您的用户名"
+        android:hint="@string/usernameHint"
         android:inputType="textPersonName" />
 
     <EditText
@@ -17,28 +17,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="请输入您的密码"
+        android:hint="@string/passwordHint"
         android:inputType="textPassword" />
 
     <CheckBox
-        android:id="@+id/isRemember"
+        android:id="@+id/isRemembered"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="记住密码" />
+        android:text="@string/isRemembered" />
 
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="登录" />
+        android:text="@string/login" />
 
     <Button
         android:id="@+id/register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="注册" />
+        android:text="@string/register" />
 
 </LinearLayout>

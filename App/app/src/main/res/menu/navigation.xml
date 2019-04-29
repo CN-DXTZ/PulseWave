@@ -3,20 +3,20 @@
 
     <item
         android:id="@+id/nav_bluetooth"
-        android:orderInCategory="1"
+        android:orderInCategory="0"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/bluetooth" />
 
     <item
         android:id="@+id/nav_web"
-        android:orderInCategory="2"
+        android:orderInCategory="1"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/server" />
 
     <item
-        android:id="@+id/nav_aboutMe"
-        android:orderInCategory="0"
+        android:id="@+id/nav_profile"
+        android:orderInCategory="2"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/AboutMe" />
+        android:title="@string/profile" />
 
 </menu>

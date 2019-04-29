@@ -5,13 +5,48 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/connect_bluetooth"
+        android:id="@+id/bleScan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="连接蓝牙" />
+        android:layout_margin="12dp"
+        android:text="@string/bleScan" />
 
-    <EditText
+    <ListView
+        android:id="@+id/bleDevices"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:id="@+id/BLEManger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/bleConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="@string/bleConnect" />
+
+        <Button
+            android:id="@+id/bleStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="@string/bleCollect" />
+
+        <Button
+            android:id="@+id/bleRealTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:text="@string/bleRealTime" />
+
+    </LinearLayout>
 
 </LinearLayout>

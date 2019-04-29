@@ -1,23 +1,26 @@
 package com.db.app.service;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.db.app.entity.User;
 
 
 public class SharedPreferencesService {
-    private static String LG_USERNAME = "lg_username";
-    private static String LG_PASSWORD = "lg_password";
-    private static String LG_ISREMEMBER = "lg_isRemember";
-
-    private static String USER_JSON = "user_json";
-
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
 
-    public void setSp(SharedPreferences sp) {
+    private static String LOGIN_USERNAME = "login_username";
+    private static String LOGIN_PASSWORD = "login_password";
+    private static String LOGIN_ISREMEMBER = "login_isRemember";
+
+    private static String USER_JSON = "user_json";
+
+    private static String BLE_ADDRESS = "ble_address";
+
+    public SharedPreferencesService(SharedPreferences sp) {
         this.sp = sp;
         this.editor = sp.edit();
     }
@@ -26,27 +29,27 @@ public class SharedPreferencesService {
      * 读写登录信息
      */
     public void writeLoginConfig(String username, String password, Boolean isRemember) {
-        editor.putString(LG_USERNAME, username);
-        editor.putString(LG_PASSWORD, password);
-        editor.putBoolean(LG_ISREMEMBER, isRemember);
+        editor.putString(LOGIN_USERNAME, username);
+        editor.putString(LOGIN_PASSWORD, password);
+        editor.putBoolean(LOGIN_ISREMEMBER, isRemember);
         editor.apply();
     }
 
     public void clearLoginConfig() {
-        editor.putBoolean(LG_ISREMEMBER, false);
+        editor.putBoolean(LOGIN_ISREMEMBER, false);
         editor.apply();
     }
 
     public String readLgUsername() {
-        return sp.getString(LG_USERNAME, "");
+        return sp.getString(LOGIN_USERNAME, "");
     }
 
     public String readLgPassword() {
-        return sp.getString(LG_PASSWORD, "");
+        return sp.getString(LOGIN_PASSWORD, "");
     }
 
     public boolean readIsRemember() {
-        return sp.getBoolean(LG_ISREMEMBER, false);
+        return sp.getBoolean(LOGIN_ISREMEMBER, false);
     }
 
 
@@ -55,16 +58,28 @@ public class SharedPreferencesService {
      */
     public void writeUser(User currUser) {
         editor.putString(USER_JSON, JSON.toJSONString(currUser));
-        Log.e("writeuser", JSON.toJSONString(currUser));
         editor.apply();
     }
 
     public User readUser() {
-        String user_json = sp.getString(USER_JSON, "");
-        if (user_json.isEmpty())
+        String currUserJson = sp.getString(USER_JSON, null);
+        if (currUserJson == null)
             return null;
-        User currUser = JSON.parseObject(user_json, User.class);
-        Log.e("readUser", currUser.toString());
-        return currUser;
+        return JSON.parseObject(currUserJson, User.class);
+    }
+
+    /**
+     * 读写蓝牙设备MAC地址信息
+     */
+    public void writeBLEAddress(String strBLEAddress) {
+        editor.putString(BLE_ADDRESS, strBLEAddress);
+        editor.apply();
+    }
+
+    public String readBLEAddress() {
+        String strBLEAddress = sp.getString(BLE_ADDRESS, null);
+        if (strBLEAddress == null)
+            return null;
+        return strBLEAddress;
     }
 }

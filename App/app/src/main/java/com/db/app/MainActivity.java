@@ -7,9 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.db.app.R;
-import com.db.app.fregment.AboutMe;
-import com.db.app.fregment.Bluetooth;
+import com.db.app.fregment.Profile;
+import com.db.app.fregment.BlueTooth.BLE;
 import com.db.app.fregment.FragmentAdapter;
 import com.db.app.fregment.Server;
 
@@ -17,8 +16,8 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private ViewPager viewPager;
 
-    private AboutMe aboutMe = new AboutMe();
-    private Bluetooth bluetooth = new Bluetooth();
+    private Profile profile = new Profile();
+    private BLE BLE = new BLE();
     private Server web = new Server();
 
     @Override

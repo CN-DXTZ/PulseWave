@@ -21,19 +21,19 @@ import com.db.app.service.LoginService;
 import com.db.app.service.SharedPreferencesService;
 
 
-public class AboutMe extends Fragment {
-    private EditText etUsername;
-    private EditText etPassword;
-    private CheckBox cbRemember;
-    private Button btLogin;
-    private Button btRegister;
+public class Profile extends Fragment {
+    private EditText et_username;
+    private EditText et_password;
+    private CheckBox cb_isRemember;
+    private Button bt_login;
+    private Button bt_register;
 
     private SharedPreferencesService sharedPreferencesService;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.aboutme, container, false);
+        return inflater.inflate(R.layout.login, container, false);
     }
 
     @Override
@@ -46,37 +46,37 @@ public class AboutMe extends Fragment {
     }
 
     private void initUI() {
-        etUsername = getActivity().findViewById(R.id.username);
-        etPassword = getActivity().findViewById(R.id.password);
-        cbRemember = getActivity().findViewById(R.id.isRemember);
-        btLogin = getActivity().findViewById(R.id.login);
-        btRegister = getActivity().findViewById(R.id.register);
+        et_username = getActivity().findViewById(R.id.username);
+        et_password = getActivity().findViewById(R.id.password);
+        cb_isRemember = getActivity().findViewById(R.id.isRemembered);
+        bt_login = getActivity().findViewById(R.id.login);
+        bt_register = getActivity().findViewById(R.id.register);
 
         // 账户密码输入框
-        etUsername.addTextChangedListener(mTextWatcher);
-        etPassword.addTextChangedListener(mTextWatcher);
+        et_username.addTextChangedListener(mTextWatcher);
+        et_password.addTextChangedListener(mTextWatcher);
 
         // 记住密码框
-        cbRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        cb_isRemember.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked)
                     sharedPreferencesService.writeLoginConfig(
-                            etUsername.getText().toString(),
-                            etPassword.getText().toString(),
-                            cbRemember.isChecked());
+                            et_username.getText().toString(),
+                            et_password.getText().toString(),
+                            cb_isRemember.isChecked());
                 else
                     sharedPreferencesService.clearLoginConfig();
             }
         });
 
         // 登录按键
-        btLogin.setOnClickListener(new View.OnClickListener() {
+        bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 User loginUser = new User();
-                loginUser.setUsername(etUsername.getText().toString());
-                loginUser.setPassword(etPassword.getText().toString());
+                loginUser.setUsername(et_username.getText().toString());
+                loginUser.setPassword(et_password.getText().toString());
 
                 LoginService.loginRequest(getActivity(), loginUser, sharedPreferencesService);
             }
@@ -85,7 +85,7 @@ public class AboutMe extends Fragment {
         /**
          * ******************注册按键
          */
-        btRegister.setOnClickListener(new View.OnClickListener() {
+        bt_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "注册", Toast.LENGTH_SHORT).show();
@@ -104,23 +104,22 @@ public class AboutMe extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (cbRemember.isChecked())
+            if (cb_isRemember.isChecked())
                 sharedPreferencesService.writeLoginConfig(
-                        etUsername.getText().toString(),
-                        etPassword.getText().toString(),
-                        cbRemember.isChecked());
+                        et_username.getText().toString(),
+                        et_password.getText().toString(),
+                        cb_isRemember.isChecked());
         }
     };
 
     private void initData() {
-        sharedPreferencesService = new SharedPreferencesService();
-        sharedPreferencesService.setSp(getActivity().getApplicationContext()
+        sharedPreferencesService = new SharedPreferencesService(getActivity().getApplicationContext()
                 .getSharedPreferences("config", Context.MODE_PRIVATE));
 
         if (sharedPreferencesService.readIsRemember()) {
-            etUsername.setText(sharedPreferencesService.readLgUsername());
-            etPassword.setText(sharedPreferencesService.readLgPassword());
-            cbRemember.setChecked(true);
+            et_username.setText(sharedPreferencesService.readLgUsername());
+            et_password.setText(sharedPreferencesService.readLgPassword());
+            cb_isRemember.setChecked(true);
         }
     }
 }
