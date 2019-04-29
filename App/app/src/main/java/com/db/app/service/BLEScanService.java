@@ -6,19 +6,20 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 
-
-public class BLEService {
+/**
+ * 蓝牙扫描服务
+ */
+public class BLEScanService {
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothAdapter.LeScanCallback mLeScanCallback;
-    private boolean mScanning = false;
 
     private static final int REQUEST_ENABLE_BT = 1;
 
 
-    public BLEService(Activity activity,
-                      BluetoothAdapter.LeScanCallback mLeScanCallback) {
-        
+    public BLEScanService(Activity activity,
+                          BluetoothAdapter.LeScanCallback mLeScanCallback) {
+        // 获取蓝牙管理和适配器
         mBluetoothManager = (BluetoothManager) activity.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = mBluetoothManager.getAdapter();
 
@@ -42,10 +43,8 @@ public class BLEService {
 
     public void scanDeviceEnable(final boolean enable) {
         if (enable) { // 启动扫描
-            mScanning = true;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else { // 停止扫描
-            mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
     }

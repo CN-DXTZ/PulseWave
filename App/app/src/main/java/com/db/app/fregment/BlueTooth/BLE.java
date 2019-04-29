@@ -2,6 +2,7 @@ package com.db.app.fregment.BlueTooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -16,8 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.db.app.MainActivity;
 import com.db.app.R;
-import com.db.app.service.BLEService;
+import com.db.app.service.BLECtrlService;
+import com.db.app.service.BLEScanService;
 
 import java.util.ArrayList;
 
@@ -26,21 +29,22 @@ public class BLE extends Fragment {
     private Button bt_bleScan;
     private ListView listView_bleDevices;
     private LinearLayout linearView_BLEManger;
-    private boolean mScanning = false;
+    private boolean mScanning;
     private Button bt_bleConnect;
-    private boolean mConnecting = false;
+    private boolean mConnecting;
     private Button bt_bleCollect;
-    private boolean mCollecting = false;
+    private boolean mCollecting;
     private Button bt_bleRealTime;
 
-    private BLEService bleService;
-    private ArrayList<BluetoothDevice> list_bleDevices;
+    private BLEScanService mBLEScanService;
+    private ArrayList<BluetoothDevice> listBLEDevices;
+    private BluetoothDevice mBLEDevice;
+    private static Intent mIntent_BLECtrlService;
 
     private static final long SCAN_PERIOD = 10000; // 扫描时间：10s
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.bluetooth, container, false);
     }
 
@@ -78,6 +82,7 @@ public class BLE extends Fragment {
         public void onClick(View v) {
             linearView_BLEManger.setVisibility(View.GONE); // 隐藏 选中蓝牙的管理界面
             connectEnable(false); // 断开连接
+            mBLEDevice = null; // 清楚当前蓝牙设备信息
 
             if (mScanning) { // 正在扫描，点击停止
                 scanEnable(false);
@@ -102,13 +107,13 @@ public class BLE extends Fragment {
             mScanning = true;
             bt_bleScan.setText(R.string.bleDisScanned);
 
-            list_bleDevices.clear(); // 清楚设备列表
-            bleService.scanDeviceEnable(true); // 蓝牙服务启动搜索附近设备
+            listBLEDevices.clear(); // 清楚设备列表
+            mBLEScanService.scanDeviceEnable(true); // 蓝牙服务启动搜索附近设备
         } else { // 停止扫描
             mScanning = false;
             bt_bleScan.setText(R.string.bleScan);
 
-            bleService.scanDeviceEnable(false); // 蓝牙服务停止搜索附近设备
+            mBLEScanService.scanDeviceEnable(false); // 蓝牙服务停止搜索附近设备
         }
     }
 
@@ -119,14 +124,17 @@ public class BLE extends Fragment {
     class mOnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //获取当前Device数据并只显示当前Device
-            BluetoothDevice currBLEDevice = (BluetoothDevice) parent.getItemAtPosition(position);
-            list_bleDevices.clear();
-            list_bleDevices.add(currBLEDevice);
+            // 获取当前Device数据
+            mBLEDevice = (BluetoothDevice) parent.getItemAtPosition(position);
+            // 只显示当前Device
+            listBLEDevices.clear();
+            listBLEDevices.add(mBLEDevice);
             updateListView();
 
-            Toast.makeText(getActivity(), currBLEDevice.getName(), Toast.LENGTH_LONG).show();
-            bleService.scanDeviceEnable(false);
+            Toast.makeText(getActivity(), "蓝牙名称:" + mBLEDevice.getName()
+                    + "\n蓝牙MAC地址: " + mBLEDevice.getAddress(), Toast.LENGTH_LONG).show();
+
+            mBLEScanService.scanDeviceEnable(false);
             linearView_BLEManger.setVisibility(View.VISIBLE); // 显示 选中蓝牙的管理界面
         }
     }
@@ -149,12 +157,19 @@ public class BLE extends Fragment {
         if (enable) { // 连接
             mConnecting = true;
             bt_bleConnect.setText(R.string.bleDisConnect);
+
+            // 通过intent告诉蓝牙控制服务连接蓝牙
+            mIntent_BLECtrlService.putExtra(BLECtrlService.EXTRA_COMMAND, BLECtrlService.COMMAND_CONNECT);
+            mIntent_BLECtrlService.putExtra(BLECtrlService.CONNECT_ADDRESS, mBLEDevice.getAddress());
         } else { // 断开
             mConnecting = false;
             bt_bleConnect.setText(R.string.bleConnect);
 
             collectEnable(false);
+            // 通过intent告诉蓝牙控制服务断开蓝牙
+            mIntent_BLECtrlService.putExtra(BLECtrlService.EXTRA_COMMAND, BLECtrlService.COMMAND_DISCONNECT);
         }
+        getActivity().startService(mIntent_BLECtrlService);
     }
 
     /**
@@ -205,15 +220,20 @@ public class BLE extends Fragment {
      */
     private void updateListView() {
         // 列表视图绑定适配器
-        listView_bleDevices.setAdapter(new BLEDeviceItemAdapter(this.getContext(), list_bleDevices));
+        listView_bleDevices.setAdapter(new BLEDeviceItemAdapter(this.getContext(), listBLEDevices));
     }
 
     /**
      * Data初始化
      */
     private void initData() {
-        list_bleDevices = new ArrayList<BluetoothDevice>();
-        bleService = new BLEService(getActivity(), new mLeScanCallback());
+        mScanning = false;
+        mConnecting = false;
+        mCollecting = false;
+        mBLEScanService = new BLEScanService(getActivity(), new mLeScanCallback());
+        listBLEDevices = new ArrayList<BluetoothDevice>();
+        mBLEDevice = null;
+        mIntent_BLECtrlService = new Intent(getActivity(), BLECtrlService.class);
     }
 
     /**
@@ -223,8 +243,8 @@ public class BLE extends Fragment {
         @Override
         public void onLeScan(BluetoothDevice device, int rssi, final byte[] scanRecord) {
             // 若蓝牙设备列表未存储该设备地址且设备名不为空
-            if (!list_bleDevices.contains(device) && device.getName() != null) {
-                list_bleDevices.add(device);
+            if (!listBLEDevices.contains(device) && device.getName() != null) {
+                listBLEDevices.add(device);
                 updateListView();
             }
         }

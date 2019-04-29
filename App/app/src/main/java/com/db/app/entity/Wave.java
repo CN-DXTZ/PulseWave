@@ -1,7 +1,5 @@
 package com.db.app.entity;
 
-
-
 public class Wave {
     private Integer time;
     private String value;
