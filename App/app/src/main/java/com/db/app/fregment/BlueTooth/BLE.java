@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.db.app.MainActivity;
 import com.db.app.R;
 import com.db.app.service.BLECtrlService;
 import com.db.app.service.BLEScanService;
@@ -42,6 +41,10 @@ public class BLE extends Fragment {
     private static Intent mIntent_BLECtrlService;
 
     private static final long SCAN_PERIOD = 10000; // 扫描时间：10s
+    public static final String COLLECT_DISABLE = "1"; // 停止采集标志
+    public static final String COLLECT_ENABLE = "2"; // 开始采集标志
+
+    private Toast mToast;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -131,10 +134,10 @@ public class BLE extends Fragment {
             listBLEDevices.add(mBLEDevice);
             updateListView();
 
-            Toast.makeText(getActivity(), "蓝牙名称:" + mBLEDevice.getName()
-                    + "\n蓝牙MAC地址: " + mBLEDevice.getAddress(), Toast.LENGTH_LONG).show();
+            showToast("蓝牙名称:" + mBLEDevice.getName()
+                    + "\n蓝牙MAC地址: " + mBLEDevice.getAddress());
 
-            mBLEScanService.scanDeviceEnable(false);
+            scanEnable(false);
             linearView_BLEManger.setVisibility(View.VISIBLE); // 显示 选中蓝牙的管理界面
         }
     }
@@ -185,7 +188,7 @@ public class BLE extends Fragment {
                     collectEnable(true);
                 }
             } else {
-                Toast.makeText(getActivity(), "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                showToast("蓝牙未连接");
             }
         }
     }
@@ -194,10 +197,19 @@ public class BLE extends Fragment {
         if (enable) { // 启动采集
             mCollecting = true;
             bt_bleCollect.setText(R.string.bleDisCollect);
+
+            // 通过intent告诉蓝牙控制服务发送开始采集标志
+            mIntent_BLECtrlService.putExtra(BLECtrlService.EXTRA_COMMAND, BLECtrlService.COMMAND_WRITE_CHARACTERISTIC);
+            mIntent_BLECtrlService.putExtra(BLECtrlService.WRITE_VALUE, COLLECT_ENABLE);
         } else { // 停止采集
             mCollecting = false;
             bt_bleCollect.setText(R.string.bleCollect);
+
+            // 通过intent告诉蓝牙控制服务发送停止采集标志
+            mIntent_BLECtrlService.putExtra(BLECtrlService.EXTRA_COMMAND, BLECtrlService.COMMAND_WRITE_CHARACTERISTIC);
+            mIntent_BLECtrlService.putExtra(BLECtrlService.WRITE_VALUE, COLLECT_DISABLE);
         }
+        getActivity().startService(mIntent_BLECtrlService);
     }
 
     /**
@@ -207,9 +219,9 @@ public class BLE extends Fragment {
         @Override
         public void onClick(View v) {
             if (mConnecting) {
-                Toast.makeText(getActivity(), "实时波形", Toast.LENGTH_SHORT).show();
+                showToast("实时波形");
             } else {
-                Toast.makeText(getActivity(), "蓝牙未连接", Toast.LENGTH_SHORT).show();
+                showToast("蓝牙未连接");
             }
         }
     }
@@ -231,13 +243,13 @@ public class BLE extends Fragment {
         mConnecting = false;
         mCollecting = false;
         mBLEScanService = new BLEScanService(getActivity(), new mLeScanCallback());
-        listBLEDevices = new ArrayList<BluetoothDevice>();
+        listBLEDevices = new ArrayList<>();
         mBLEDevice = null;
         mIntent_BLECtrlService = new Intent(getActivity(), BLECtrlService.class);
     }
 
     /**
-     * BLE服务之扫描回调函数
+     * BLE扫描服务的扫描回调函数
      */
     class mLeScanCallback implements BluetoothAdapter.LeScanCallback {
         @Override
@@ -249,6 +261,12 @@ public class BLE extends Fragment {
             }
         }
     }
+
+    private void showToast(final String showText) {
+        if (mToast == null)
+            mToast = Toast.makeText(getActivity(), showText, Toast.LENGTH_SHORT);
+        else
+            mToast.setText(showText);
+        mToast.show();
+    }
 }
-
-
