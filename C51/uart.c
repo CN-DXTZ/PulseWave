@@ -74,7 +74,7 @@ void Uart1_Interrupt() interrupt 4 using 1
 			{
 				state=0;
 				Pulse_Stop();
-				Uart1_SendString("stop\r\n");			
+//				Uart1_SendString("stop\r\n");			
 				break;
 			}
 			case 0x32: // ¿ªÊ¼

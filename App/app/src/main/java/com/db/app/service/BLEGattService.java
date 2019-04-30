@@ -17,9 +17,9 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.db.app.fregment.BLE;
-
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
 
 /**
@@ -54,10 +54,14 @@ public class BLEGattService extends Service {
     public final static UUID UUID_SERVICE = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
     public final static UUID UUID_CHARACTERISTIC = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
 
-    // 不绑定服务: by startService()
+    private byte firstReceiveTemp; // 存储第一组接收数据中暂时未使用的一个字节
+    private int numDataPacket; // 记录数据包个数
+    private Queue<Integer> waveQueue;
+
+
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return null; // 不绑定服务: by startService()，直接返回null即可
     }
 
     @Override
@@ -91,7 +95,7 @@ public class BLEGattService extends Service {
                 connectAddress = intent.getStringExtra(CONNECT_ADDRESS);
                 mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(connectAddress);
                 mBluetoothGatt = mBluetoothDevice.connectGatt(this, true, mBluetoothGattCallback);
-                discoverService();
+                discoverService(); // 发现服务
                 break;
 
             // 断开连接指令
@@ -101,23 +105,23 @@ public class BLEGattService extends Service {
                     mBluetoothGatt.disconnect();
                 break;
 
-            // 发送数据指令
-//            case COMMAND_WRITE_CHARACTERISTIC:
-//                Log.d(TAG_BLEGATTSERVICE, "发送数据");
-//                String strWrite = intent.getStringExtra(WRITE_VALUE);
-//                sendCharacteristic(strWrite);
-//                break;
+            // 发送数据指令（未使用）
+            case COMMAND_WRITE_CHARACTERISTIC:
+                Log.d(TAG_BLEGATTSERVICE, "发送数据");
+                String strWrite = intent.getStringExtra(WRITE_VALUE);
+                bleSend(strWrite);
+                break;
 
             // 启动采集指令
             case COMMAND_COLLECT:
                 Log.d(TAG_BLEGATTSERVICE, "启动采集");
-                sendCharacteristic(COLLECT_ENABLE);
+                bleSend(COLLECT_ENABLE);
                 break;
 
             // 停止采集指令
             case COMMAND_DISCOLLECT:
                 Log.d(TAG_BLEGATTSERVICE, "停止采集");
-                sendCharacteristic(COLLECT_DISABLE);
+                bleSend(COLLECT_DISABLE);
                 break;
 
             default:
@@ -129,13 +133,13 @@ public class BLEGattService extends Service {
 
     private void discoverService() {
         /**
-         * onServicesDiscovered 不被调用
+         * 错误描述： onServicesDiscovered 不被调用
          * 错误原因：未知，貌似是因为寻找服务时应确保在UI线程调用
          * 解决办法，子线程延时600ms（原理未知）
          * 参考：https://stackoverflow.com/questions/41434555/onservicesdiscovered-never-called-while-connecting-to-gatt-server#comment70285228_41526267
          */
         try {
-            Thread.sleep(600);
+            Thread.sleep(300);
             mBluetoothGatt.discoverServices();
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
@@ -143,8 +147,8 @@ public class BLEGattService extends Service {
         }
     }
 
-    private void sendCharacteristic(String strSend) {
-        if (mBluetoothGatt != null) {
+    private void bleSend(String strSend) {
+        if (mBluetoothGatt != null && mGattCharacteristic != null) {
             mGattCharacteristic.setValue(strSend);
             mBluetoothGatt.writeCharacteristic(mGattCharacteristic);
         }
@@ -176,7 +180,7 @@ public class BLEGattService extends Service {
                 mGattService = mBluetoothGatt.getService(UUID_SERVICE);
                 mGattCharacteristic = mGattService.getCharacteristic(UUID_CHARACTERISTIC);
 
-                // 设置特征监听
+                // 发现服务和特征后，设置特征监听
                 setCharacteristicNotification(mGattCharacteristic, true);
             }
         }
@@ -184,6 +188,11 @@ public class BLEGattService extends Service {
         // 设置特征监听
         private void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                                    boolean enabled) {
+            // 初始化第一组接收数据中未使用节缓存
+            firstReceiveTemp = -1;
+            numDataPacket = 0;
+            waveQueue = new LinkedList<Integer>();
+
             mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID_CHARACTERISTIC);
@@ -192,7 +201,8 @@ public class BLEGattService extends Service {
         }
 
         @Override
-        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+        public void onCharacteristicWrite(BluetoothGatt gatt,
+                                          BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
             Log.d(TAG_BLEGATTSERVICE, "数据发送成功");
 
@@ -211,29 +221,66 @@ public class BLEGattService extends Service {
         }
 
         @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+        public void onCharacteristicChanged(BluetoothGatt gatt,
+                                            BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.d(TAG_BLEGATTSERVICE, "获得数据输入");
 
-            final byte[] data = characteristic.getValue();
-            if (data != null && data.length > 0) {
-                Log.d(TAG_BLEGATTSERVICE, "byte Arrays: " + Arrays.toString(data));
+            receiveData(characteristic);
+        }
 
+        private void receiveData(BluetoothGattCharacteristic characteristic) {
+            final byte[] receive = characteristic.getValue();
+            Log.d(TAG_BLEGATTSERVICE, "ArrayOrigin-----------: " + Arrays.toString(receive));
+
+            // 处理接收到的数据
+            // -1即0xFF
+            if (receive != null && receive.length > 0) {
+                if (firstReceiveTemp == -1) { // 第一组
+                    if (receive[0] == -1) { // 判断数据头
+                        Log.d(TAG_BLEGATTSERVICE, "Array111: " + Arrays.toString(receive));
+
+                        for (int i = 1; i < 19; i += 3) {
+                            int currWave = toWave(receive[i], receive[i + 1], receive[i + 2]);
+                            waveQueue.add(currWave);
+                        }
+
+                        firstReceiveTemp = receive[19];
+                    }
+                } else { // 第二组
+                    Log.d(TAG_BLEGATTSERVICE, "Array222: " + Arrays.toString(receive));
+
+                    int currWave = toWave(firstReceiveTemp, receive[0], receive[1]);
+                    waveQueue.add(currWave);
+                    for (int i = 2; i < 8; i += 3) {
+                        currWave = toWave(receive[i], receive[i + 1], receive[i + 2]);
+                        waveQueue.add(currWave);
+                    }
+
+                    firstReceiveTemp = -1;
+                    numDataPacket++;
+                }
+            }
+
+            // 对处理后的数据进行分配
+            if (numDataPacket == 20) {
+                Log.d(TAG_BLEGATTSERVICE, "waveQueue:" + waveQueue.toString());
+                numDataPacket = 0;
+                waveQueue.clear();
             }
         }
-    };
 
-//    private void broadcastUpdate(final BluetoothGattCharacteristic characteristic) {
-//        final byte[] data = characteristic.getValue();
-//        if (data != null && data.length > 0) {
-//            System.out.println("------------------data----------------------" + Arrays.toString(data));
-//
-//            final StringBuilder stringBuilder = new StringBuilder(data.length);
-//            for (byte byteChar : data)
-//                stringBuilder.append(String.format("%02X ", byteChar));
-//            System.out.println("------------------data----------------------" + stringBuilder.toString());
-//        }
-//    }
+        // 将拆分的三个字节还原为Wave数据
+        private int toWave(byte a, byte b, byte c) {
+            return (toU8(a) << 16) + (toU8(b) << 8) + (toU8(c));
+        }
+
+        // 将byte转化为unsigned char
+        private int toU8(byte a) {
+            return a & 0xFF;
+        }
+
+    };
 
     private void showToast(final String showText) {
         mHandler.post(new Runnable() {
