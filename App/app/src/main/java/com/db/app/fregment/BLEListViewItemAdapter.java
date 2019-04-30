@@ -1,4 +1,4 @@
-package com.db.app.fregment.BlueTooth;
+package com.db.app.fregment;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -12,8 +12,8 @@ import com.db.app.R;
 
 import java.util.ArrayList;
 
-class BLEDeviceItemAdapter extends ArrayAdapter {
-    public BLEDeviceItemAdapter(Context context, ArrayList<BluetoothDevice> bleDevices) {
+class BLEListViewItemAdapter extends ArrayAdapter {
+    public BLEListViewItemAdapter(Context context, ArrayList<BluetoothDevice> bleDevices) {
         // 因为textView为自定义，故不需要布局资源ID，故textViewResourceId随便填
         super(context, 0, bleDevices);
     }

@@ -151,18 +151,18 @@ void MPU6050_Init()
 extern u8 send[];	// 存储一个要发送的蓝牙数据包
 void MPU6050_Store()
 {
-	send[31]=Single_ReadI2C(ACCEL_XOUT_H);
-	send[32]=Single_ReadI2C(ACCEL_XOUT_L);
-	send[33]=Single_ReadI2C(ACCEL_YOUT_H);
-	send[34]=Single_ReadI2C(ACCEL_YOUT_L);
-	send[35]=Single_ReadI2C(ACCEL_ZOUT_H);
-	send[36]=Single_ReadI2C(ACCEL_ZOUT_L);
-	send[37]=Single_ReadI2C(GYRO_XOUT_H);
-	send[38]=Single_ReadI2C(GYRO_XOUT_L);
-	send[39]=Single_ReadI2C(GYRO_YOUT_H);
-	send[40]=Single_ReadI2C(GYRO_YOUT_L);
-	send[41]=Single_ReadI2C(GYRO_ZOUT_H);
-	send[42]=Single_ReadI2C(GYRO_ZOUT_L);
+	send[28]=Single_ReadI2C(ACCEL_XOUT_H);
+	send[29]=Single_ReadI2C(ACCEL_XOUT_L);
+	send[30]=Single_ReadI2C(ACCEL_YOUT_H);
+	send[31]=Single_ReadI2C(ACCEL_YOUT_L);
+	send[32]=Single_ReadI2C(ACCEL_ZOUT_H);
+	send[33]=Single_ReadI2C(ACCEL_ZOUT_L);
+	send[34]=Single_ReadI2C(GYRO_XOUT_H);
+	send[35]=Single_ReadI2C(GYRO_XOUT_L);
+	send[36]=Single_ReadI2C(GYRO_YOUT_H);
+	send[37]=Single_ReadI2C(GYRO_YOUT_L);
+	send[38]=Single_ReadI2C(GYRO_ZOUT_H);
+	send[39]=Single_ReadI2C(GYRO_ZOUT_L);
 }
 
 

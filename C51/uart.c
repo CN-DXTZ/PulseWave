@@ -118,8 +118,8 @@ void Uart2_Interrupt() interrupt 8 using 2
 			Pulse_state++;
 			Pulse_num++;
 						
-			// 10个脉搏波读取完
-			if(Pulse_num==31) 
+			// 9个脉搏波读取完
+			if(Pulse_num==28) 
 			{
 				Pulse_num=1;
 				state=2;

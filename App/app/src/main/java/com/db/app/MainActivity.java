@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.db.app.fregment.Profile;
-import com.db.app.fregment.BlueTooth.BLE;
+import com.db.app.fregment.BLE;
 import com.db.app.fregment.FragmentAdapter;
 import com.db.app.fregment.Server;
 

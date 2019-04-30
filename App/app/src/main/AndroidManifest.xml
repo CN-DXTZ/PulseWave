@@ -14,6 +14,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -36,7 +39,7 @@
         </activity>
 
         <!--自定义蓝牙服务-->
-        <service android:name=".service.BLECtrlService" />
+        <service android:name=".service.BLEGattService" />
     </application>
 
 
