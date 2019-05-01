@@ -17,7 +17,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
@@ -35,6 +34,7 @@ public class BLEGattService extends Service {
 
     private Toast mToast;
     private Handler mHandler;
+    private Context mContext;
 
     public final static String TAG_BLEGATTSERVICE = "BLEGattService";
 
@@ -56,7 +56,10 @@ public class BLEGattService extends Service {
 
     private byte firstReceiveTemp; // 存储第一组接收数据中暂时未使用的一个字节
     private int numDataPacket; // 记录数据包个数
-    private Queue<Integer> waveQueue;
+    private int numStart; // 跳过最开始采集的两个包
+    private Queue<Integer> waveQueue; // 记录脉搏波实际值
+    private Queue<Integer> accelQueue; // 记录加速度实际值
+    private SqliteService sqliteService;
 
 
     @Override
@@ -73,6 +76,7 @@ public class BLEGattService extends Service {
         mBluetoothAdapter = mBluetoothManager.getAdapter();
 
         mHandler = new Handler();
+        mContext = this;
 
         Log.d(TAG_BLEGATTSERVICE, "服务已启动");
     }
@@ -115,6 +119,18 @@ public class BLEGattService extends Service {
             // 启动采集指令
             case COMMAND_COLLECT:
                 Log.d(TAG_BLEGATTSERVICE, "启动采集");
+
+                // 初始化第一组接收数据中未使用节缓存
+                firstReceiveTemp = -1;
+                numDataPacket = 0;
+                numStart = 4;
+                if (waveQueue == null)
+                    waveQueue = new LinkedList<Integer>();
+                if (accelQueue == null)
+                    accelQueue = new LinkedList<Integer>();
+                if (sqliteService == null)
+                    sqliteService = new SqliteService(mContext);
+
                 bleSend(COLLECT_ENABLE);
                 break;
 
@@ -139,7 +155,7 @@ public class BLEGattService extends Service {
          * 参考：https://stackoverflow.com/questions/41434555/onservicesdiscovered-never-called-while-connecting-to-gatt-server#comment70285228_41526267
          */
         try {
-            Thread.sleep(300);
+            Thread.sleep(500);
             mBluetoothGatt.discoverServices();
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
@@ -188,11 +204,6 @@ public class BLEGattService extends Service {
         // 设置特征监听
         private void setCharacteristicNotification(BluetoothGattCharacteristic characteristic,
                                                    boolean enabled) {
-            // 初始化第一组接收数据中未使用节缓存
-            firstReceiveTemp = -1;
-            numDataPacket = 0;
-            waveQueue = new LinkedList<Integer>();
-
             mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
 
             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID_CHARACTERISTIC);
@@ -226,35 +237,46 @@ public class BLEGattService extends Service {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.d(TAG_BLEGATTSERVICE, "获得数据输入");
 
-            receiveData(characteristic);
+            receiveProcess(characteristic);
         }
 
-        private void receiveData(BluetoothGattCharacteristic characteristic) {
-            final byte[] receive = characteristic.getValue();
-            Log.d(TAG_BLEGATTSERVICE, "ArrayOrigin-----------: " + Arrays.toString(receive));
+        /**
+         * 对接收到的单字节数据进行解析为真实数据
+         */
+        private void receiveProcess(BluetoothGattCharacteristic characteristic) {
 
-            // 处理接收到的数据
+            if ((--numStart) == 0)
+                return;
+
+            final byte[] receive = characteristic.getValue();
+//            Log.d(TAG_BLEGATTSERVICE, "Array000-----------: " + Arrays.toString(receive));
+
+            // 处理接收到的数据并缓存
             // -1即0xFF
             if (receive != null && receive.length > 0) {
-                if (firstReceiveTemp == -1) { // 第一组
+                if (firstReceiveTemp == -1) { // 完整数据包中的第一组
                     if (receive[0] == -1) { // 判断数据头
-                        Log.d(TAG_BLEGATTSERVICE, "Array111: " + Arrays.toString(receive));
+//                        Log.d(TAG_BLEGATTSERVICE, "Array111: " + Arrays.toString(receive));
 
+                        // 6组脉搏波
                         for (int i = 1; i < 19; i += 3) {
-                            int currWave = toWave(receive[i], receive[i + 1], receive[i + 2]);
-                            waveQueue.add(currWave);
+                            waveQueue.add(toWave(receive[i], receive[i + 1], receive[i + 2]));
                         }
 
                         firstReceiveTemp = receive[19];
                     }
                 } else { // 第二组
-                    Log.d(TAG_BLEGATTSERVICE, "Array222: " + Arrays.toString(receive));
+//                    Log.d(TAG_BLEGATTSERVICE, "Array222: " + Arrays.toString(receive));
 
-                    int currWave = toWave(firstReceiveTemp, receive[0], receive[1]);
-                    waveQueue.add(currWave);
+                    // 3组脉搏波
+                    waveQueue.add(toWave(firstReceiveTemp, receive[0], receive[1]));
                     for (int i = 2; i < 8; i += 3) {
-                        currWave = toWave(receive[i], receive[i + 1], receive[i + 2]);
-                        waveQueue.add(currWave);
+                        waveQueue.add(toWave(receive[i], receive[i + 1], receive[i + 2]));
+                    }
+
+                    // 6组加速度
+                    for (int i = 8; i < 20; i += 2) {
+                        accelQueue.add(toAccel(receive[i], receive[i + 1]));
                     }
 
                     firstReceiveTemp = -1;
@@ -262,17 +284,28 @@ public class BLEGattService extends Service {
                 }
             }
 
-            // 对处理后的数据进行分配
-            if (numDataPacket == 20) {
-                Log.d(TAG_BLEGATTSERVICE, "waveQueue:" + waveQueue.toString());
+            // 对还原后的数据进行分配
+            if (numDataPacket == 10) {
                 numDataPacket = 0;
+
+                Log.d(TAG_BLEGATTSERVICE, "waveQueue:" + waveQueue.toString());
+                Log.d(TAG_BLEGATTSERVICE, "accelQueue:" + accelQueue.toString());
+
+                sqliteService.insert(waveQueue.toString(), waveQueue.toString());
                 waveQueue.clear();
+                accelQueue.clear();
             }
         }
 
-        // 将拆分的三个字节还原为Wave数据
+        // 将拆分的三个字节（3个unsigned char）还原为无符号24位Wave数据
         private int toWave(byte a, byte b, byte c) {
-            return (toU8(a) << 16) + (toU8(b) << 8) + (toU8(c));
+            return ((toU8(a) << 16) | (toU8(b) << 8) | (toU8(c)));
+            // <=> ((toU8(a) << 16) + (toU8(b) << 8) + (toU8(c)))
+        }
+
+        // 将拆分的两个字节（第一个为char，第二个为unsigned char）还原为有符号16位Accel数据
+        private int toAccel(byte a, byte b) {
+            return ((a << 8) | (b & 0xff));
         }
 
         // 将byte转化为unsigned char
