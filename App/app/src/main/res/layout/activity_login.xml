@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     android:orientation="vertical">
 
     <EditText
@@ -9,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="@string/usernameHint"
+        android:hint="@string/loginUsernameHint"
         android:inputType="textPersonName" />
 
     <EditText
@@ -17,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:hint="@string/passwordHint"
+        android:hint="@string/loginPasswordHint"
         android:inputType="textPassword" />
 
     <CheckBox
@@ -25,20 +26,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="@string/isRemembered" />
+        android:text="@string/loginIsRemembered" />
 
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="@string/login" />
+        android:text="@string/loginLogin" />
 
     <Button
         android:id="@+id/register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
-        android:text="@string/register" />
+        android:text="@string/loginRegister" />
 
 </LinearLayout>

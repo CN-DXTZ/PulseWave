@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/horizontal"
+    android:paddingVertical="@dimen/vertical">
+
+    <TextView
+        android:id="@+id/profileItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/firstTextSize" />
+
+    <TextView
+        android:id="@+id/profileItemValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/secondTextSize" />
+
+</RelativeLayout>

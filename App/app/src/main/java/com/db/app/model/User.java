@@ -1,14 +1,14 @@
-package com.db.app.entity;
+package com.db.app.model;
 
 public class User {
     private Integer id;
     private String username;
     private String password;
+    private String name;
     private Boolean gender; // false为男 true位女
     private Integer age;
-    private String name;
-    private float height;
-    private float weight;
+    private Float height;
+    private Float weight;
     private String phone;
     private Boolean identity; // false为用户 true为医师
 
@@ -36,6 +36,14 @@ public class User {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Boolean getGender() {
         return gender;
     }
@@ -52,27 +60,19 @@ public class User {
         this.age = age;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public float getHeight() {
+    public Float getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(Float height) {
         this.height = height;
     }
 
-    public float getWeight() {
+    public Float getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(Float weight) {
         this.weight = weight;
     }
 
@@ -98,9 +98,9 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
                 ", gender=" + gender +
                 ", age=" + age +
-                ", name='" + name + '\'' +
                 ", height=" + height +
                 ", weight=" + weight +
                 ", phone='" + phone + '\'' +

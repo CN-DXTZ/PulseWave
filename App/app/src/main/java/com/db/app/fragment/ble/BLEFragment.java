@@ -1,4 +1,4 @@
-package com.db.app.fregment;
+package com.db.app.fragment.ble;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -24,7 +24,7 @@ import com.db.app.service.BLEScanService;
 import java.util.ArrayList;
 
 
-public class BLE extends Fragment {
+public class BLEFragment extends Fragment {
     private Button bt_bleScan;
     private ListView listView_bleDevices;
     private LinearLayout linearView_BLEManger;
@@ -47,13 +47,12 @@ public class BLE extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.bluetooth, container, false);
+        return inflater.inflate(R.layout.fragment_bluetooth, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         initUI();
         initData();
     }
@@ -79,7 +78,7 @@ public class BLE extends Fragment {
     /**
      * 蓝牙设备 扫描/停止
      */
-    class mScanOnClickListener implements OnClickListener {
+    private class mScanOnClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
             linearView_BLEManger.setVisibility(View.GONE); // 隐藏 选中蓝牙的管理界面
@@ -144,7 +143,7 @@ public class BLE extends Fragment {
     /**
      * 蓝牙设备 连接/断开
      */
-    class mConnectOnClickListener implements OnClickListener {
+    private class mConnectOnClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
             if (mConnecting) {
@@ -177,7 +176,7 @@ public class BLE extends Fragment {
     /**
      * 采集 开始/停止
      */
-    class mCollectOnClickListener implements OnClickListener {
+    private class mCollectOnClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
             if (mConnecting) {
@@ -212,7 +211,7 @@ public class BLE extends Fragment {
     /**
      * 实时数据
      */
-    class mRealTimeOnClickListener implements OnClickListener {
+    private class mRealTimeOnClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
             if (mConnecting) {
@@ -229,7 +228,7 @@ public class BLE extends Fragment {
      */
     private void updateListView() {
         // 列表视图绑定适配器
-        listView_bleDevices.setAdapter(new BLEListViewItemAdapter(this.getContext(), listBLEDevices));
+        listView_bleDevices.setAdapter(new BLEItemAdapter(this.getContext(), listBLEDevices));
     }
 
     /**

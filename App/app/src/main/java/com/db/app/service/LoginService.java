@@ -4,7 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.db.app.entity.User;
+import com.db.app.model.User;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 

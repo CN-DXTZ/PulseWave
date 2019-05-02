@@ -1,6 +1,5 @@
-package com.db.app.fregment;
+package com.db.app.fragment.profile;
 
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,10 @@ import com.db.app.R;
 
 import java.util.ArrayList;
 
-class BLEListViewItemAdapter extends ArrayAdapter {
-    public BLEListViewItemAdapter(Context context, ArrayList<BluetoothDevice> bleDevices) {
+class ProfileItemAdapter extends ArrayAdapter {
+    public ProfileItemAdapter(Context context, ArrayList<ProfileItem> profileInfos) {
         // 因为textView为自定义，故不需要布局资源ID，故textViewResourceId随便填
-        super(context, 0, bleDevices);
+        super(context, 0, profileInfos);
     }
 
     /**
@@ -25,18 +24,20 @@ class BLEListViewItemAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         //获取当前Device数据
-        BluetoothDevice currBLEDevice = (BluetoothDevice) getItem(position);
+        ProfileItem currProfileItem = (ProfileItem) getItem(position);
 
         //重复使用的现有列表项视图
         View currItemView = convertView;
 
         //若不存在，则从指定的layout布局膨胀创建新的列表项视图
         if (currItemView == null) {
-            currItemView = LayoutInflater.from(getContext()).inflate(R.layout.bledevice_item, parent, false);
+            currItemView = LayoutInflater.from(getContext()).inflate(R.layout.item_profile, parent, false);
         }
 
-        TextView tv_bleDeviceName = (TextView) currItemView.findViewById(R.id.bleDeviceName);
-        tv_bleDeviceName.setText(currBLEDevice.getName());
+        TextView tv_profileItemName = (TextView) currItemView.findViewById(R.id.profileItemName);
+        tv_profileItemName.setText(currProfileItem.getItemName());
+        TextView tv_profileItemValue = (TextView) currItemView.findViewById(R.id.profileItemValue);
+        tv_profileItemValue.setText(currProfileItem.getItemValue());
 
         return currItemView;
     }

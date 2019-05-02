@@ -1,11 +1,9 @@
 package com.db.app.service;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSON;
-import com.db.app.entity.User;
+import com.db.app.model.User;
 
 
 public class SharedPreferencesService {
@@ -40,15 +38,15 @@ public class SharedPreferencesService {
         editor.apply();
     }
 
-    public String readLgUsername() {
+    public String getLgUsername() {
         return sp.getString(LOGIN_USERNAME, "");
     }
 
-    public String readLgPassword() {
+    public String getLgPassword() {
         return sp.getString(LOGIN_PASSWORD, "");
     }
 
-    public boolean readIsRemember() {
+    public boolean getIsRemember() {
         return sp.getBoolean(LOGIN_ISREMEMBER, false);
     }
 
@@ -61,7 +59,7 @@ public class SharedPreferencesService {
         editor.apply();
     }
 
-    public User readUser() {
+    public User getUser() {
         String currUserJson = sp.getString(USER_JSON, null);
         if (currUserJson == null)
             return null;

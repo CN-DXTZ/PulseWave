@@ -3,45 +3,85 @@ package com.db.app;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.db.app.fregment.Profile;
-import com.db.app.fregment.BLE;
-import com.db.app.fregment.FragmentAdapter;
-import com.db.app.fregment.Server;
+import com.db.app.fragment.HistoryFragment;
+import com.db.app.fragment.ble.BLEFragment;
+import com.db.app.fragment.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private BottomNavigationView navigation;
-    private ViewPager viewPager;
-
-    private Profile profile = new Profile();
-    private BLE BLE = new BLE();
-    private Server web = new Server();
+    private BottomNavigationView mNavigation;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
 
-        navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mNavigation = findViewById(R.id.navigation);
+        mNavigation.setOnNavigationItemSelectedListener(new mOnNavigationItemSelectedListener());
 
-        viewPager = findViewById(R.id.viewpager);
-        viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
+        mViewPager = findViewById(R.id.viewpager);
+        mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
+        mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
     }
 
+    // 页面适配器
+    public class FragmentAdapter extends FragmentPagerAdapter {
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        public FragmentAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
         @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new BLEFragment();
+            } else if (position == 1) {
+                return new HistoryFragment();
+            } else {
+                return new ProfileFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+    }
+
+    // 设置点击下方导航栏响应页面切换
+    class mOnNavigationItemSelectedListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(MenuItem menuItem) {
             // 点击BottomNavigationView的Item项，切换ViewPager页面
-            // menu/navigation.xml里加的android:orderInCategory属性就是下面item.getOrder()取的值
-            viewPager.setCurrentItem(item.getOrder());
+            // menu/mNavigation.xml里加的android:orderInCategory属性就是下面item.getOrder()取的值
+            mViewPager.setCurrentItem(menuItem.getOrder());
             return true;
         }
-    };
+    }
+
+    // 设置滑动页面切换对应导航栏突出
+    class mOnPageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
+            mNavigation.setSelectedItemId(mNavigation.getMenu().getItem(i).getItemId());
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int i) {
+
+        }
+    }
 }

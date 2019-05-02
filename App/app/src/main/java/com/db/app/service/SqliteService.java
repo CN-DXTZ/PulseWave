@@ -10,9 +10,12 @@ import java.util.Date;
 
 
 public class SqliteService extends SQLiteOpenHelper {
+    private final static String DATABASE = "HrbustAPP";
+    private final static String TABLE = "data";
+
 
     public SqliteService(Context context) {
-        super(context, "HrbustAPP", null, 1);
+        super(context, DATABASE, null, 1);
     }
 
     @Override
@@ -29,14 +32,20 @@ public class SqliteService extends SQLiteOpenHelper {
 
     }
 
+    // 插入数据
     public void insert(String wave, String accel) {
         SQLiteDatabase dbWrite = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("time", new Date().getTime());
         cv.put("wave", wave);
         cv.put("accel", accel);
-        dbWrite.insert("data", null, cv);
+        dbWrite.insert(TABLE, null, cv);
         dbWrite.close();
+    }
+
+    // 清空表
+    public void clear() {
+        this.getWritableDatabase().execSQL("DELETE FROM " + TABLE);
     }
 
     public void readWave() {

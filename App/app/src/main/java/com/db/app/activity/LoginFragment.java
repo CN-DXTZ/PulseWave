@@ -1,4 +1,4 @@
-package com.db.app.fregment;
+package com.db.app.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,12 +16,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.db.app.R;
-import com.db.app.entity.User;
+import com.db.app.model.User;
 import com.db.app.service.LoginService;
 import com.db.app.service.SharedPreferencesService;
 
 
-public class Profile extends Fragment {
+public class LoginFragment extends Fragment {
     private EditText et_username;
     private EditText et_password;
     private CheckBox cb_isRemember;
@@ -30,18 +30,15 @@ public class Profile extends Fragment {
 
     private SharedPreferencesService sharedPreferencesService;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.login, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_login, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         initUI();
-
         initData();
     }
 
@@ -116,9 +113,9 @@ public class Profile extends Fragment {
         sharedPreferencesService = new SharedPreferencesService(getActivity().getApplicationContext()
                 .getSharedPreferences("config", Context.MODE_PRIVATE));
 
-        if (sharedPreferencesService.readIsRemember()) {
-            et_username.setText(sharedPreferencesService.readLgUsername());
-            et_password.setText(sharedPreferencesService.readLgPassword());
+        if (sharedPreferencesService.getIsRemember()) {
+            et_username.setText(sharedPreferencesService.getLgUsername());
+            et_password.setText(sharedPreferencesService.getLgPassword());
             cb_isRemember.setChecked(true);
         }
     }

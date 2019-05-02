@@ -3,17 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.db.app">
 
-    <!--网络请求权限-->
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-
-    <!--蓝牙权限-->
+    <!-- To auto-complete the email text field in the activity_login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 网络请求权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 蓝牙权限 -->
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -24,10 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-
         android:usesCleartextTraffic="true"
-
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -38,9 +38,17 @@
             </intent-filter>
         </activity>
 
-        <!--自定义蓝牙服务-->
-        <service android:name=".service.BLEGattService" />
-    </application>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/loginTitle" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/registerTitle" />
 
+        <!-- 自定义蓝牙服务 -->
+        <service android:name=".service.BLEGattService" />
+        <!-- 自定义数据服务 -->
+        <service android:name=".service.DataService" />
+    </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.db.app.fregment;
+package com.db.app.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,28 +12,21 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.db.app.R;
-import com.db.app.entity.User;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 
 import okhttp3.Call;
-import okhttp3.ResponseBody;
 
 
-public class Server extends Fragment {
+public class HistoryFragment extends Fragment {
     private Button button_connect_bluetooth;
 
     private String BASE_URL = "http://39.107.126.150/";
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.server, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
     @Override

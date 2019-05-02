@@ -1,4 +1,4 @@
-package com.db.app.entity;
+package com.db.app.model;
 
 public class Wave {
     private Integer time;
