@@ -1,22 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/loginUsername"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:hint="@string/loginUsernameHint"
-        android:inputType="textPersonName" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/padding">
 
-    <EditText
-        android:id="@+id/loginPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:hint="@string/loginPasswordHint"
-        android:inputType="textPassword" />
-</LinearLayout>
+        <!--账号-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerUsername"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerUsernameHint"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--密码-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerPassword"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerPasswordHint"
+                android:inputType="textPassword"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--姓名-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerName"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerNameHint"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--性别-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerGender"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <Spinner
+                android:id="@+id/registerGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/registerGender" />
+
+        </LinearLayout>
+        <!--年龄-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerAge"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerAgeHint"
+                android:inputType="number"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--身高-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerHeight"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerHeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerHeightHint"
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--体重-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerWeight"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerWeightHint"
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--手机-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerPhone"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <EditText
+                android:id="@+id/registerPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registerPhoneHint"
+                android:inputType="number"
+                android:textSize="@dimen/firstTextSize" />
+        </LinearLayout>
+        <!--身份-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal"
+            android:layout_marginVertical="@dimen/vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registerIdentity"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/firstTextSize" />
+
+            <Spinner
+                android:id="@+id/registerIdentity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/registerIdentity" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/registerRegister"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_margin="@dimen/margin"
+            android:text="@string/registerRegister"
+            android:textSize="@dimen/buttonTextSize" />
+
+    </LinearLayout>
+</ScrollView>

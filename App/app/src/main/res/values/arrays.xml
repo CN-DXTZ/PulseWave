@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="registerGender">
+        <item>请选择</item>
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string-array name="registerIdentity">
+        <item>请选择</item>
+        <item>普通用户</item>
+        <item>医师</item>
+    </string-array>
+
+</resources>

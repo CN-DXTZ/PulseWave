@@ -5,23 +5,49 @@
     android:orientation="vertical"
     android:padding="@dimen/padding">
 
-    <EditText
-        android:id="@+id/loginUsername"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
-        android:hint="@string/loginUsernameHint"
-        android:inputType="textPersonName"
-        android:textSize="@dimen/firstTextSize" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/loginPassword"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loginUsername"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/firstTextSize" />
+
+        <EditText
+            android:id="@+id/loginUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/loginUsernameHint"
+            android:inputType="textPersonName"
+            android:textSize="@dimen/firstTextSize" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
-        android:hint="@string/loginPasswordHint"
-        android:inputType="textPassword"
-        android:textSize="@dimen/firstTextSize" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loginPassword"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/firstTextSize" />
+
+        <EditText
+            android:id="@+id/loginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/loginPasswordHint"
+            android:inputType="textPassword"
+            android:textSize="@dimen/firstTextSize" />
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/loginIsRemembered"

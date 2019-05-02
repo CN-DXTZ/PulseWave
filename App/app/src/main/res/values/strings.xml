@@ -25,7 +25,9 @@
 
     <!--登录-->
     <string name="loginTitle">登录</string>
+    <string name="loginUsername">账号:</string>
     <string name="loginUsernameHint">请输入您的用户名</string>
+    <string name="loginPassword">密码:</string>
     <string name="loginPasswordHint">请输入您的密码</string>
     <string name="loginIsRemembered">记住账户和密码</string>
     <string name="loginLogin">登录</string>
@@ -34,6 +36,22 @@
 
     <!--注册-->
     <string name="registerTitle">注册</string>
+    <string name="registerUsername">账号:</string>
+    <string name="registerUsernameHint">zhangsan</string>
+    <string name="registerPassword">密码:</string>
+    <string name="registerPasswordHint">1234</string>
+    <string name="registerName">姓名:</string>
+    <string name="registerNameHint">张三</string>
+    <string name="registerGender">性别:</string>
+    <string name="registerAge">年龄:</string>
+    <string name="registerAgeHint">18</string>
+    <string name="registerHeight">身高:</string>
+    <string name="registerHeightHint">175.0</string>
+    <string name="registerWeight">体重:</string>
+    <string name="registerWeightHint">70.0</string>
+    <string name="registerPhone">手机:</string>
+    <string name="registerPhoneHint">13512345678</string>
+    <string name="registerIdentity">身份:</string>
     <string name="registerRegister">注册</string>
 
 </resources>
