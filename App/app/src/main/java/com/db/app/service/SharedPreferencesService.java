@@ -59,6 +59,11 @@ public class SharedPreferencesService {
         editor.apply();
     }
 
+    public void clearUser() {
+        editor.putString(USER_JSON, null);
+        editor.apply();
+    }
+
     public User getUser() {
         String currUserJson = sp.getString(USER_JSON, null);
         if (currUserJson == null)
@@ -69,15 +74,15 @@ public class SharedPreferencesService {
     /**
      * 读写蓝牙设备MAC地址信息
      */
-    public void writeBLEAddress(String strBLEAddress) {
-        editor.putString(BLE_ADDRESS, strBLEAddress);
-        editor.apply();
-    }
-
-    public String readBLEAddress() {
-        String strBLEAddress = sp.getString(BLE_ADDRESS, null);
-        if (strBLEAddress == null)
-            return null;
-        return strBLEAddress;
-    }
+//    public void writeBLEAddress(String strBLEAddress) {
+//        editor.putString(BLE_ADDRESS, strBLEAddress);
+//        editor.apply();
+//    }
+//
+//    public String readBLEAddress() {
+//        String strBLEAddress = sp.getString(BLE_ADDRESS, null);
+//        if (strBLEAddress == null)
+//            return null;
+//        return strBLEAddress;
+//    }
 }

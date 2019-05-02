@@ -1,6 +1,7 @@
 package com.db.app.fragment.profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.db.app.R;
+import com.db.app.activity.LoginActivity;
+import com.db.app.activity.RegisterActivity;
 import com.db.app.model.User;
 import com.db.app.service.SharedPreferencesService;
 
@@ -42,7 +45,6 @@ public class ProfileFragment extends Fragment {
         initData();
     }
 
-
     private void initUI() {
         im_photo = getActivity().findViewById(R.id.profilePhoto);
         lv_profile = getActivity().findViewById(R.id.profileProfile);
@@ -59,7 +61,9 @@ public class ProfileFragment extends Fragment {
     private class mLoginOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            showToast("登录");
+            Intent intent = new Intent();
+            intent.setClass(getContext(), LoginActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -67,8 +71,9 @@ public class ProfileFragment extends Fragment {
     public class mRegisterOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            showToast("注册");
-
+            Intent intent = new Intent();
+            intent.setClass(getContext(), RegisterActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -76,7 +81,9 @@ public class ProfileFragment extends Fragment {
     private class mQuitOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            showToast("注销");
+            showToast("已注销");
+            spService.clearUser();
+            updata();
         }
     }
 
@@ -89,6 +96,13 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        System.out.println("开始");
+        updata();
+    }
+
+    // 刷新
+    private void updata() {
+        currUser = spService.getUser();
         updateButton();
         updateListView();
     }

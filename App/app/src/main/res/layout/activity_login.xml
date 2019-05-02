@@ -2,44 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/padding">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/loginUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="@dimen/margin"
         android:hint="@string/loginUsernameHint"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textSize="@dimen/firstTextSize" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/loginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="@dimen/margin"
         android:hint="@string/loginPasswordHint"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textSize="@dimen/firstTextSize" />
 
     <CheckBox
-        android:id="@+id/isRemembered"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:text="@string/loginIsRemembered" />
-
-    <Button
-        android:id="@+id/login"
+        android:id="@+id/loginIsRemembered"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:text="@string/loginLogin" />
+        android:layout_margin="@dimen/margin"
+        android:text="@string/loginIsRemembered"
+        android:textSize="@dimen/secondTextSize" />
 
     <Button
-        android:id="@+id/register"
+        android:id="@+id/loginLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="12dp"
-        android:text="@string/loginRegister" />
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_margin="@dimen/margin"
+        android:text="@string/loginLogin"
+        android:textSize="@dimen/buttonTextSize" />
+
+    <Button
+        android:id="@+id/loginRegister"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_margin="@dimen/margin"
+        android:text="@string/loginRegister"
+        android:textSize="@dimen/buttonTextSize" />
 
 </LinearLayout>

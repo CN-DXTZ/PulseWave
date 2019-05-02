@@ -1,8 +1,11 @@
 <resources>
     <dimen name="horizontal">16dp</dimen>
     <dimen name="vertical">8dp</dimen>
+    <dimen name="padding">8dp</dimen>
+    <dimen name="margin">16dp</dimen>
 
     <dimen name="buttonHeight">40dp</dimen>
+    <dimen name="buttonVertical">12dp</dimen>
     <dimen name="buttonTextSize">20sp</dimen>
 
     <dimen name="firstTextSize">24sp</dimen>

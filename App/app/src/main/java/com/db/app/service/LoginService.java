@@ -1,5 +1,7 @@
 package com.db.app.service;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
@@ -14,7 +16,8 @@ public class LoginService {
 
     public static String BASE_URL = "http://39.107.126.150/";
 
-    public static void loginRequest(final FragmentActivity fa, User user, SharedPreferencesService sharedPreferencesService) {
+    public static void loginRequest(final Context context, User user,
+                                    SharedPreferencesService spService, Activity activity) {
         OkHttpUtils
                 .post()
                 .url(BASE_URL + "/loginRequest")
@@ -27,17 +30,19 @@ public class LoginService {
                     public void onResponse(String response, int id) {
                         JSONObject jsonRoot = JSONObject.parseObject(response);
                         if (jsonRoot.getString("success").equals("true")) {
-                            Toast.makeText(fa, "登录成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show();
 
                             JSONObject jsonUser = jsonRoot.getJSONObject("message");
                             User currUser = JSONObject.toJavaObject(jsonUser, User.class);
                             System.out.println(currUser);
-                            sharedPreferencesService.writeUser(currUser);
+                            spService.writeUser(currUser);
+
+                            activity.finish();
                         } else {
                             if (jsonRoot.getString("message").equals("error"))
-                                Toast.makeText(fa, "密码错误", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "密码错误", Toast.LENGTH_SHORT).show();
                             else
-                                Toast.makeText(fa, "账号不存在", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "账号不存在", Toast.LENGTH_SHORT).show();
                         }
                     }
 
