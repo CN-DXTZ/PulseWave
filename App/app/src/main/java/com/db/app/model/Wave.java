@@ -1,5 +1,7 @@
 package com.db.app.model;
 
+import java.util.ArrayList;
+
 public class Wave {
     private Integer time;
     private String value;

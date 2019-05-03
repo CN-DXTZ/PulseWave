@@ -1,4 +1,4 @@
-package com.db.app.service;
+package com.db.app.service.bluetoothService;
 
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -17,9 +17,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import com.db.app.service.DataService;
+
 import java.util.UUID;
 
 /**
@@ -33,11 +32,12 @@ public class BLEGattService extends Service {
     private BluetoothGattService mGattService;
     private BluetoothGattCharacteristic mGattCharacteristic;
 
+    private static Intent mIntent_DataService;
+
     private Toast mToast;
     private Handler mHandler;
-    private Context mContext;
 
-    public final static String TAG_BLEGATTSERVICE = "BLEGattService";
+    public final static String TAG_BLEGATTSERVICE = "My_BLEGattService";
 
     public static final int COMMAND_CONNECT = 0;
     public static final int COMMAND_DISCONNECT = 1;
@@ -45,9 +45,9 @@ public class BLEGattService extends Service {
     public static final int COMMAND_COLLECT = 3;
     public static final int COMMAND_DISCOLLECT = 4;
 
-    public final static String EXTRA_COMMAND = "com.db.ble.extra_command";
-    public final static String CONNECT_ADDRESS = "com.db.ble.connect_address";
-    public final static String WRITE_VALUE = "com.db.ble.write_value";
+    public final static String BLE_EXTRA_COMMAND = "com.db.ble.ble_extra_command";
+    public final static String BLE_CONNECT_ADDRESS = "com.db.ble.ble_connect_address";
+    public final static String BLE_WRITE_VALUE = "com.db.ble.ble_write_value";
 
     public static final String COLLECT_DISABLE = "1"; // 停止采集标志
     public static final String COLLECT_ENABLE = "2"; // 开始采集标志
@@ -55,11 +55,6 @@ public class BLEGattService extends Service {
     public final static UUID UUID_SERVICE = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
     public final static UUID UUID_CHARACTERISTIC = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
 
-    private byte firstReceiveTemp; // 存储第一组接收数据中暂时未使用的一个字节
-    private int numDataPacket; // 记录数据包个数
-    private LinkedList<Integer> waveQueue; // 记录脉搏波实际值
-    private LinkedList<Integer> accelQueue; // 记录加速度实际值
-    private SqliteService sqliteService;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -69,60 +64,57 @@ public class BLEGattService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        mIntent_DataService = new Intent(getBaseContext(), DataService.class);
 
         // 获取蓝牙管理和适配器
         mBluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = mBluetoothManager.getAdapter();
 
         mHandler = new Handler();
-        mContext = this;
-
-        Log.d(TAG_BLEGATTSERVICE, "服务已启动");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        Log.d(TAG_BLEGATTSERVICE, "服务已终止");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int command = intent.getIntExtra(EXTRA_COMMAND, -1);
-        String connectAddress = null;
+        int command = intent.getIntExtra(BLE_EXTRA_COMMAND, -1);
         switch (command) {
-            // 连接指令
+            // 连接蓝牙 指令
             case COMMAND_CONNECT:
                 Log.d(TAG_BLEGATTSERVICE, "连接蓝牙");
-                connectAddress = intent.getStringExtra(CONNECT_ADDRESS);
+                String connectAddress = intent.getStringExtra(BLE_CONNECT_ADDRESS);
                 mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(connectAddress);
                 mBluetoothGatt = mBluetoothDevice.connectGatt(this, true, mBluetoothGattCallback);
                 discoverService(); // 发现服务
                 break;
 
-            // 断开连接指令
+            // 断开连接蓝牙 指令
             case COMMAND_DISCONNECT:
                 Log.d(TAG_BLEGATTSERVICE, "断开蓝牙");
                 if (mBluetoothGatt != null)
                     mBluetoothGatt.disconnect();
                 break;
 
-            // 发送数据指令（未使用）
+            // 发送数据 指令 （未使用）
             case COMMAND_WRITE_CHARACTERISTIC:
                 Log.d(TAG_BLEGATTSERVICE, "发送数据");
-                String strWrite = intent.getStringExtra(WRITE_VALUE);
+                String strWrite = intent.getStringExtra(BLE_WRITE_VALUE);
                 bleSend(strWrite);
                 break;
 
-            // 启动采集指令
+            // 启动采集 指令
             case COMMAND_COLLECT:
                 Log.d(TAG_BLEGATTSERVICE, "启动采集");
-                receiveInit();
+                mIntent_DataService.putExtra(DataService.DATA_EXTRA_COMMAND,
+                        DataService.COMMAND_RECEIVE_INIT); // 发给DataService命令：初始化接收相关变量
+                startService(mIntent_DataService);
                 bleSend(COLLECT_ENABLE);
                 break;
 
-            // 停止采集指令
+            // 停止采集 指令
             case COMMAND_DISCOLLECT:
                 Log.d(TAG_BLEGATTSERVICE, "停止采集");
                 bleSend(COLLECT_DISABLE);
@@ -158,21 +150,6 @@ public class BLEGattService extends Service {
         }
     }
 
-    /**
-     * 初始化接收
-     */
-    private void receiveInit() {
-        firstReceiveTemp = -1;
-        numDataPacket = 0;
-        if (waveQueue == null)
-            waveQueue = new LinkedList<Integer>();
-        if (accelQueue == null)
-            accelQueue = new LinkedList<Integer>();
-        if (sqliteService == null) {
-            sqliteService = new SqliteService(mContext);
-            sqliteService.clear();
-        }
-    }
 
     private final BluetoothGattCallback mBluetoothGattCallback = new BluetoothGattCallback() {
         @Override
@@ -239,73 +216,16 @@ public class BLEGattService extends Service {
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
             super.onCharacteristicChanged(gatt, characteristic);
-            Log.d(TAG_BLEGATTSERVICE, "获得数据输入");
+//            Log.d(TAG_BLEGATTSERVICE, "获得数据输入");
 
-            receiveProcess(characteristic);
-        }
-
-        /**
-         * 对接收到的单字节数据进行解析为真实数据
-         */
-        private void receiveProcess(BluetoothGattCharacteristic characteristic) {
             final byte[] receive = characteristic.getValue();
-//            Log.d(TAG_BLEGATTSERVICE, "Array-----------: " + Arrays.toString(receive));
-
-            // 处理接收到的数据并缓存
-            if (receive != null && receive.length > 0) {
-                // -1即0xFF
-                if (firstReceiveTemp == -1) { // 完整数据包中的第一组
-                    if (receive[0] == -1) { // 判断数据头
-                        // 6组脉搏波
-                        for (int i = 1; i < 19; i += 3) {
-                            waveQueue.add(toWave(receive[i], receive[i + 1], receive[i + 2]));
-                        }
-                        // 缓存第20个数据，与第二个分数据包一起解析
-                        firstReceiveTemp = receive[19];
-                    }
-                } else { // 第二组
-                    // 3组脉搏波
-                    waveQueue.add(toWave(firstReceiveTemp, receive[0], receive[1]));
-                    for (int i = 2; i < 8; i += 3) {
-                        waveQueue.add(toWave(receive[i], receive[i + 1], receive[i + 2]));
-                    }
-                    // 6组加速度
-                    for (int i = 8; i < 20; i += 2) {
-                        accelQueue.add(toAccel(receive[i], receive[i + 1]));
-                    }
-                    // 状态改变
-                    firstReceiveTemp = -1;
-                    numDataPacket++;
-                }
-            }
-
-            // 对还原后的数据进行分配
-            if (numDataPacket == 10) {
-                numDataPacket = 0;
-                // 去除采集初始光较暗时的数据波动
-                if (waveQueue.getFirst() > 1000000) {
-                    sqliteService.insert(waveQueue.toString(), waveQueue.toString());
-                }
-                waveQueue.clear();
-                accelQueue.clear();
-            }
+            mIntent_DataService.putExtra(DataService.DATA_EXTRA_COMMAND,
+                    DataService.COMMAND_RECEIVE_PROCESS); // 发给DataService命令：对接收的字节数组进行处理
+            mIntent_DataService.putExtra(DataService.DATA_RECEIVE_BYTE_ARRAY,
+                    receive);  // 发给接收的字节数组
+            startService(mIntent_DataService);
         }
 
-        // 将拆分的三个字节（3个unsigned char）还原为无符号24位Wave数据
-        private int toWave(byte a, byte b, byte c) {
-            return ((toU8(a) << 16) | (toU8(b) << 8) | (toU8(c)));
-            // <=> ((toU8(a) << 16) + (toU8(b) << 8) + (toU8(c)))
-        }
-
-        // 将拆分的两个字节（第一个为char，第二个为unsigned char）还原为有符号16位Accel数据
-        private int toAccel(byte a, byte b) {
-            return ((a << 8) | (b & 0xff));
-        }
-
-        // 将byte转化为unsigned char
-        private int toU8(byte a) {
-            return a & 0xFF;
-        }
 
     };
 

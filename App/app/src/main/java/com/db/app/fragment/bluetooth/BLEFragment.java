@@ -18,8 +18,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.db.app.R;
-import com.db.app.service.BLEGattService;
-import com.db.app.service.BLEScanService;
+import com.db.app.service.bluetoothService.BLEGattService;
+import com.db.app.service.bluetoothService.BLEScanService;
 
 import java.util.ArrayList;
 
@@ -36,9 +36,10 @@ public class BLEFragment extends Fragment {
     private Button bt_bleRealTime;
 
     private BLEScanService mBLEScanService;
+    private static Intent mIntent_BLECtrlService;
+
     private ArrayList<BluetoothDevice> listBLEDevices;
     private BluetoothDevice mBLEDevice;
-    private static Intent mIntent_BLECtrlService;
 
     private static final long SCAN_PERIOD = 10000; // 扫描时间：10s
 
@@ -160,15 +161,15 @@ public class BLEFragment extends Fragment {
             bt_bleConnect.setText(R.string.bleDisConnect);
 
             // 通过intent告诉蓝牙控制服务连接蓝牙
-            mIntent_BLECtrlService.putExtra(BLEGattService.EXTRA_COMMAND, BLEGattService.COMMAND_CONNECT);
-            mIntent_BLECtrlService.putExtra(BLEGattService.CONNECT_ADDRESS, mBLEDevice.getAddress());
+            mIntent_BLECtrlService.putExtra(BLEGattService.BLE_EXTRA_COMMAND, BLEGattService.COMMAND_CONNECT);
+            mIntent_BLECtrlService.putExtra(BLEGattService.BLE_CONNECT_ADDRESS, mBLEDevice.getAddress());
         } else { // 断开
             mConnecting = false;
             bt_bleConnect.setText(R.string.bleConnect);
 
             collectEnable(false);
             // 通过intent告诉蓝牙控制服务断开蓝牙
-            mIntent_BLECtrlService.putExtra(BLEGattService.EXTRA_COMMAND, BLEGattService.COMMAND_DISCONNECT);
+            mIntent_BLECtrlService.putExtra(BLEGattService.BLE_EXTRA_COMMAND, BLEGattService.COMMAND_DISCONNECT);
         }
         getActivity().startService(mIntent_BLECtrlService);
     }
@@ -197,13 +198,13 @@ public class BLEFragment extends Fragment {
             bt_bleCollect.setText(R.string.bleDisCollect);
 
             // 通过intent告诉蓝牙控制服务发送开始采集标志
-            mIntent_BLECtrlService.putExtra(BLEGattService.EXTRA_COMMAND, BLEGattService.COMMAND_COLLECT);
+            mIntent_BLECtrlService.putExtra(BLEGattService.BLE_EXTRA_COMMAND, BLEGattService.COMMAND_COLLECT);
         } else { // 停止采集
             mCollecting = false;
             bt_bleCollect.setText(R.string.bleCollect);
 
             // 通过intent告诉蓝牙控制服务发送停止采集标志
-            mIntent_BLECtrlService.putExtra(BLEGattService.EXTRA_COMMAND, BLEGattService.COMMAND_DISCOLLECT);
+            mIntent_BLECtrlService.putExtra(BLEGattService.BLE_EXTRA_COMMAND, BLEGattService.COMMAND_DISCOLLECT);
         }
         getActivity().startService(mIntent_BLECtrlService);
     }

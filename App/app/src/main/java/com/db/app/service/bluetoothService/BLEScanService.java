@@ -1,4 +1,4 @@
-package com.db.app.service;
+package com.db.app.service.bluetoothService;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
