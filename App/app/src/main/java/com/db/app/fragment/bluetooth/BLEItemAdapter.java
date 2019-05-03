@@ -1,4 +1,4 @@
-package com.db.app.fragment.ble;
+package com.db.app.fragment.bluetooth;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.db.app.R;
-import com.db.app.fragment.profile.ProfileItem;
 
 import java.util.ArrayList;
 

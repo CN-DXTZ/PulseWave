@@ -1,4 +1,4 @@
-package com.db.app.fragment.ble;
+package com.db.app.fragment.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

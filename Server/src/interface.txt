@@ -13,15 +13,15 @@ Request     1.成功      {"success":"true","message":"{\"age\":22,\"id\":1,\"id
 
 2. 注册
 /registerRequest
-POST        form-data   username	varchar
-			password	varchar
-			gender		bit		// false为男 true位女
+POST        form-data   username	varchar		// not null
+			password	varchar		// not null
+			gender		bit				// false为男 true位女
 			age		int		 
 			name		varchar
 			height		double
 			weight		double
 			phone		varchar
-			identity	bit		// false为用户 true为医师
+			identity	bit		// not null	// false为用户 true为医师
 
 Request     1.成功      {"success":"true"}
             2.已存在    {"success":"false"}
@@ -56,7 +56,7 @@ Request     1.成功    {"success":"true","wave":[{"time":6,"value":"167"},{"tim
 /constantRequest?id=1&prevTime=13
 GET         params id=1 prevTime=13
             其中id用于表示上传的用户
-            prevTime表示上一次最后的时刻（因为可能由于网卡等原因，不一定每秒都请求成功）：
+            prevTime表示上一次最后的时刻（因为可能由于网卡等原因，不一定每次都请求成功）：
                 1.若为第一次请求，即为实际请求时刻-1
                 2.若为中间请求，即为上一次请求的最后一个时刻
 

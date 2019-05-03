@@ -34,9 +34,9 @@ class ProfileItemAdapter extends ArrayAdapter {
             currItemView = LayoutInflater.from(getContext()).inflate(R.layout.item_profile, parent, false);
         }
 
-        TextView tv_profileItemName = (TextView) currItemView.findViewById(R.id.profileItemName);
+        TextView tv_profileItemName = currItemView.findViewById(R.id.profileItemName);
         tv_profileItemName.setText(currProfileItem.getItemName());
-        TextView tv_profileItemValue = (TextView) currItemView.findViewById(R.id.profileItemValue);
+        TextView tv_profileItemValue = currItemView.findViewById(R.id.profileItemValue);
         tv_profileItemValue.setText(currProfileItem.getItemValue());
 
         return currItemView;

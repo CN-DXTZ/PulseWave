@@ -15,7 +15,7 @@ import android.widget.EditText;
 
 import com.db.app.R;
 import com.db.app.model.User;
-import com.db.app.service.HttpService;
+import com.db.app.service.http.LoginHttpUtil;
 import com.db.app.service.SharedPreferencesService;
 
 public class LoginActivity extends AppCompatActivity {
@@ -60,7 +60,8 @@ public class LoginActivity extends AppCompatActivity {
             loginUser.setUsername(et_username.getText().toString());
             loginUser.setPassword(et_password.getText().toString());
 
-            HttpService.loginRequest(getApplicationContext(), loginUser, spService, mActivity);
+            LoginHttpUtil.loginRequest(getApplicationContext(), mActivity,
+                    loginUser, spService);
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.db.app.MyApplication;
 import com.db.app.R;
 import com.db.app.activity.LoginActivity;
 import com.db.app.activity.RegisterActivity;
@@ -21,7 +22,9 @@ import com.db.app.service.SharedPreferencesService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
+/**
+ * 个人信息界面
+ */
 public class ProfileFragment extends Fragment {
     private ImageView im_photo;
     private ListView lv_profile;
@@ -68,7 +71,7 @@ public class ProfileFragment extends Fragment {
     }
 
     // 注册按键
-    public class mRegisterOnClickListener implements View.OnClickListener {
+    private class mRegisterOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
@@ -82,27 +85,27 @@ public class ProfileFragment extends Fragment {
         @Override
         public void onClick(View v) {
             showToast("已注销");
-            spService.clearUser();
-            updata();
+            spService.clearCurrUser();
+            ((MyApplication) (getActivity().getApplication())).setCurrUser(null);
+            updateAll();
         }
     }
 
     private void initData() {
         spService = new SharedPreferencesService(getActivity().getApplicationContext()
                 .getSharedPreferences("config", Context.MODE_PRIVATE));
-        currUser = spService.getUser();
+        updateAll();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        System.out.println("开始");
-        updata();
+        updateAll();
     }
 
     // 刷新
-    private void updata() {
-        currUser = spService.getUser();
+    private void updateAll() {
+        currUser = ((MyApplication) (getActivity().getApplication())).getCurrUser();
         updateButton();
         updateListView();
     }
@@ -129,23 +132,32 @@ public class ProfileFragment extends Fragment {
     private ArrayList<ProfileItem> userToProfileItemArray(User user) {
         String name = "", gender = "", age = "", height = "", weight = "", phone = "";
         if (user != null) {
+
             if (user.getName() != null)
                 name = user.getName();
+
             if (user.getGender() != null) {
                 if (user.getGender())
                     gender = "女";
                 else
                     gender = "男";
             }
+
             if (user.getAge() != null)
                 age = user.getAge().toString();
-            if (user.getHeight() != null)
-                height = user.getHeight().toString();
-            if (user.getWeight() != null)
-                weight = user.getWeight().toString();
+
+            height = user.getHeight().toString();
+            if (height.equals("0.0"))
+                height = "";
+
+            weight = user.getWeight().toString();
+            if (weight.equals("0.0"))
+                weight = "";
+
             if (user.getPhone() != null)
                 phone = user.getPhone();
         }
+
         ArrayList<ProfileItem> arrayList = new ArrayList<ProfileItem>(Arrays.asList(
                 new ProfileItem("姓名", name),
                 new ProfileItem("性别", gender),
@@ -165,6 +177,3 @@ public class ProfileFragment extends Fragment {
         mToast.show();
     }
 }
-
-
-

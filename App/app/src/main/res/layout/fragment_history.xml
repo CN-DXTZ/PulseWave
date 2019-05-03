@@ -5,9 +5,15 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/connect_server"
+        android:id="@+id/upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="连接服务器" />
+        android:text="上传" />
+
+    <Button
+        android:id="@+id/download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下载" />
 
 </LinearLayout>
