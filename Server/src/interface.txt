@@ -29,7 +29,7 @@ Request     1.成功      {"success":"true"}
 
 
 3. 上传数据
-/uploadRequest
+/uploadRequest	
 POST        JSON        {"id":1,"wave":[{"time":10,"value":"137"},{"time":12,"value":"196"}]}
                           其中id用于表示上传的用户
                             wave为一个Array的脉搏波数据

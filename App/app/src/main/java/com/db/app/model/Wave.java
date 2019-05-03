@@ -4,6 +4,11 @@ public class Wave {
     private Integer time;
     private String value;
 
+    public Wave(Integer time, String value) {
+        this.time = time;
+        this.value = value;
+    }
+
     public Integer getTime() {
         return time;
     }

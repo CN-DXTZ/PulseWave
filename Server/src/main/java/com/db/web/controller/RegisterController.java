@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.db.web.entity.User;
 import com.db.web.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

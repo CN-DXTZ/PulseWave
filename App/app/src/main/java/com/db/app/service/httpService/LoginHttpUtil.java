@@ -1,4 +1,4 @@
-package com.db.app.service.http;
+package com.db.app.service.httpService;
 
 import android.app.Activity;
 import android.content.Context;

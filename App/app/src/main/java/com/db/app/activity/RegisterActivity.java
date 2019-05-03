@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.db.app.R;
 import com.db.app.model.User;
-import com.db.app.service.http.RegisterHttpUtil;
+import com.db.app.service.httpService.RegisterHttpUtil;
 import com.db.app.service.SharedPreferencesService;
 
 public class RegisterActivity extends AppCompatActivity {

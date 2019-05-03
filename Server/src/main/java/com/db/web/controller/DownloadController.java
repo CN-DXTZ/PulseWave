@@ -21,17 +21,16 @@ public class DownloadController {
     public String downloadRequest(@RequestParam(value = "id") String id,
                                   @RequestParam(value = "startTime") String startTime,
                                   @RequestParam(value = "endTime") String endTime) {
-        JSONObject back = new JSONObject();
+        JSONObject backJson = new JSONObject();
+        backJson.put("success", "true");
 
         List<Wave> waveList = waveService.selectWave_timeRange(id, startTime, endTime);
-
-        back.put("success", "true");
 
         // List<Wave>转JSONArray
         JSONArray waveJSONArray = new JSONArray();
         waveJSONArray.addAll(waveList);
-        back.put("wave", waveJSONArray);
+        backJson.put("wave", waveJSONArray);
 
-        return back.toJSONString();
+        return backJson.toJSONString();
     }
 }

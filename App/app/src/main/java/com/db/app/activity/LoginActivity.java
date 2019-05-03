@@ -15,7 +15,7 @@ import android.widget.EditText;
 
 import com.db.app.R;
 import com.db.app.model.User;
-import com.db.app.service.http.LoginHttpUtil;
+import com.db.app.service.httpService.LoginHttpUtil;
 import com.db.app.service.SharedPreferencesService;
 
 public class LoginActivity extends AppCompatActivity {

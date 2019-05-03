@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         mViewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
         mViewPager.addOnPageChangeListener(new mOnPageChangeListener());
+        mViewPager.setOffscreenPageLimit(0);
         mNavigation.setOnNavigationItemSelectedListener(new mOnNavigationItemSelectedListener());
     }
 
