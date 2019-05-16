@@ -1,12 +1,12 @@
 package com.db.app.service;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.Date;
+import com.db.app.MyApplication;
 
 
 public class SqliteService extends SQLiteOpenHelper {
@@ -33,12 +33,12 @@ public class SqliteService extends SQLiteOpenHelper {
     }
 
     // 插入数据
-    public void insert(String wave, String accel) {
+    public void insert(MyApplication myApplication) {
         SQLiteDatabase dbWrite = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put("time", new Date().getTime());
-        cv.put("wave", wave);
-        cv.put("accel", accel);
+        cv.put("time", myApplication.getCurrInfo().getTime());
+        cv.put("wave", myApplication.getCurrInfo().getWave());
+        cv.put("accel", myApplication.getCurrInfo().getAccel());
         dbWrite.insert(TABLE, null, cv);
         dbWrite.close();
     }
@@ -51,19 +51,4 @@ public class SqliteService extends SQLiteOpenHelper {
     public void readWave() {
 
     }
-
-    public void readAccel() {
-
-    }
-
-    public void readAll() {
-        SQLiteDatabase dbRead = this.getReadableDatabase();
-        Cursor cursor = dbRead.query("user", null, null, null, null, null, null);
-
-        while (cursor.moveToNext()) {
-            System.out.println(cursor.getString(cursor.getColumnIndex("name")));
-            System.out.println(cursor.getString(cursor.getColumnIndex("sex")));
-        }
-    }
-
 }

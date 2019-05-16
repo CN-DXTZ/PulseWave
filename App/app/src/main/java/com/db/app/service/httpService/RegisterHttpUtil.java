@@ -15,20 +15,17 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import okhttp3.Call;
 
-
+/**
+ * 注册请求
+ */
 public class RegisterHttpUtil {
-    public static String BASE_URL = "http://39.107.126.150/";
-
-    /**
-     * 注册请求
-     */
     public static void registerRequest(Context context, Activity activity,
                                        User user,
                                        SharedPreferencesService spService) {
         // 先添加注册请求必有项
         PostFormBuilder postFormBuilder = OkHttpUtils
                 .post()
-                .url(BASE_URL + "/registerRequest")
+                .url(HTTPService.BASE_URL + "/registerRequest")
                 .addParams("username", user.getUsername())
                 .addParams("password", user.getPassword())
                 .addParams("identity", user.getIdentity().toString());

@@ -133,8 +133,8 @@ public class BLEFragment extends Fragment {
             listBLEDevices.add(mBLEDevice);
             updateListView();
 
-            showToast("蓝牙名称:" + mBLEDevice.getName()
-                    + "\n蓝牙MAC地址: " + mBLEDevice.getAddress());
+//            showToast("蓝牙名称:" + mBLEDevice.getName()
+//                    + "\n蓝牙MAC地址: " + mBLEDevice.getAddress());
 
             scanEnable(false);
             linearView_BLEManger.setVisibility(View.VISIBLE); // 显示 选中蓝牙的管理界面

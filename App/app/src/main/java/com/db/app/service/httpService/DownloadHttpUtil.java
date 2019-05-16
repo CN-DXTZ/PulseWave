@@ -1,26 +1,22 @@
 package com.db.app.service.httpService;
 
-import android.app.Activity;
-import android.content.Context;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
-import com.db.app.MyApplication;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
 import okhttp3.Call;
 
 public class DownloadHttpUtil {
-    private static String BASE_URL = "http://39.107.126.150/";
 
-    public static void downloadRequest(Context context, Activity activity,
-                                       String startTime,
-                                       String endTime) {
+    public static void downloadWaveRequest(String id,
+                                           String startTime,
+                                           String endTime) {
         OkHttpUtils
                 .get()
-                .url(BASE_URL + "/downloadRequest")
-                .addParams("id",
-                        ((MyApplication) (activity.getApplication())).getCurrUser().getId().toString())
+                .url(HTTPService.BASE_URL + "/downloadWaveRequest")
+                .addParams("id", id)
                 .addParams("startTime", startTime)
                 .addParams("endTime", endTime)
                 .build()
@@ -29,7 +25,12 @@ public class DownloadHttpUtil {
                     @Override
                     public void onResponse(String response, int id) {
                         JSONObject jsonRoot = JSONObject.parseObject(response);
-                        System.out.println("---------------downloadRequest---------------" + jsonRoot.toString());
+
+//                        if (jsonRoot.getString("success").equals("true")) {
+//                        } else {
+//                        }
+
+                        Log.d(HTTPService.TAG_HTTPSERVICE, jsonRoot.toString());
                     }
 
                     @Override

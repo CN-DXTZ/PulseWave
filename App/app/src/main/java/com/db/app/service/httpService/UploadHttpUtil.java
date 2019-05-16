@@ -2,6 +2,7 @@ package com.db.app.service.httpService;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -11,13 +12,13 @@ import okhttp3.Call;
 import okhttp3.MediaType;
 
 public class UploadHttpUtil {
-    public static String BASE_URL = "http://39.107.126.150/";
 
-    public static void uploadRequest(Context context, Activity activity,
-                                     String requestJson) {
+    public static void uploadRequest(String requestJson) {
+//        Log.d(HTTPService.TAG_HTTPSERVICE, requestJson);
+
         OkHttpUtils
                 .postString()
-                .url(BASE_URL + "/uploadRequest")
+                .url(HTTPService.BASE_URL + "/uploadRequest")
                 .content(requestJson)
                 .mediaType(MediaType.parse("application/json; charset=utf-8"))
                 .build()
@@ -27,11 +28,11 @@ public class UploadHttpUtil {
                     public void onResponse(String response, int id) {
                         JSONObject jsonRoot = JSONObject.parseObject(response);
 
-                        if (jsonRoot.getString("success").equals("true")) {
-                        } else {
-                        }
+//                        if (jsonRoot.getString("success").equals("true")) {
+//                        } else {
+//                        }
 
-                        System.out.println("---------------uploadRequest---------------" + jsonRoot.toString());
+//                        Log.d(HTTPService.TAG_HTTPSERVICE, jsonRoot.toString());
                     }
 
                     @Override

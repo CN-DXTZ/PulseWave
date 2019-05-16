@@ -1,12 +1,14 @@
 package com.db.app.model;
 
-public class Wave {
+public class Info {
     private Long time;
     private String wave;
+    private String accel;
 
-    public Wave(Long time, String wave) {
+    public Info(Long time, String wave, String accel) {
         this.time = time;
         this.wave = wave;
+        this.accel = accel;
     }
 
     public Long getTime() {
@@ -25,11 +27,20 @@ public class Wave {
         this.wave = wave;
     }
 
+    public String getAccel() {
+        return accel;
+    }
+
+    public void setAccel(String accel) {
+        this.accel = accel;
+    }
+
     @Override
     public String toString() {
-        return "Wave{" +
+        return "Info{" +
                 "time=" + time +
                 ", wave='" + wave + '\'' +
+                ", accel='" + accel + '\'' +
                 '}';
     }
 }

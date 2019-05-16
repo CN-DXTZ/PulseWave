@@ -5,8 +5,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.db.app.MyApplication;
+import com.db.app.model.Info;
+import com.db.app.model.MyArrayList;
+import com.db.app.model.Wave;
+import com.db.app.service.httpService.HTTPService;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 
 
 public class DataService extends Service {
@@ -78,12 +84,13 @@ public class DataService extends Service {
         firstReceiveTemp = FIRST_PACKET_FLAG;
 
         numWaveArray = 0;
-        waveArray = new ArrayList<>(MAX_NUM_WAVE_ARRAY);
+        waveArray = new MyArrayList<>(MAX_NUM_WAVE_ARRAY);
         for (int i = 0; i < MAX_NUM_WAVE_ARRAY; i++)
             waveArray.add(null);
 
+
         numAccelArray = 0;
-        accelArray = new ArrayList<>(MAX_NUM_ACCEL_ARRAY);
+        accelArray = new MyArrayList<>(MAX_NUM_ACCEL_ARRAY);
         for (int i = 0; i < MAX_NUM_ACCEL_ARRAY; i++)
             accelArray.add(null);
 
@@ -142,14 +149,20 @@ public class DataService extends Service {
     // 对解析后的数据进行分配
     private void receiveDistribution() {
         if (numAccelArray == MAX_NUM_ACCEL_ARRAY) { // 10个完整蓝牙数据包分配1次
-            ArrayList<Integer> wave = new ArrayList<>(waveArray);
-            ArrayList<Integer> accel = new ArrayList<>(accelArray);
-            // 重置状态
+
+            // 存储进全局变量
+            Info currInfo = new Info(new Date().getTime(), waveArray.toString(), accelArray.toString());
+            MyApplication myApplication = ((MyApplication) (getApplication()));
+            myApplication.setCurrInfo(currInfo);
+
+            // 重置状态计数
             numWaveArray = 0;
             numAccelArray = 0;
 
-            // 异步，不锁，复制一份数据进行后续处理，而不与下一轮蓝牙接收数据处理冲突
-            sqliteService.insert(waveArray.toString(), accelArray.toString());
+            // 存储进数据库
+            sqliteService.insert(myApplication);
+            // 上传至服务器
+            HTTPService.upload(myApplication);
         }
     }
 

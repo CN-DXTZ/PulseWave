@@ -13,19 +13,16 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import okhttp3.Call;
 
-
+/**
+ * 登录请求
+ */
 public class LoginHttpUtil {
-    public static String BASE_URL = "http://39.107.126.150/";
-
-    /**
-     * 登录请求
-     */
     public static void loginRequest(Context context, Activity activity,
                                     User user,
                                     SharedPreferencesService spService) {
         OkHttpUtils
                 .post()
-                .url(BASE_URL + "/loginRequest")
+                .url(HTTPService.BASE_URL + "/loginRequest")
                 .addParams("username", user.getUsername())
                 .addParams("password", user.getPassword())
                 .build()
