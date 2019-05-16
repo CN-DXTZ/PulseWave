@@ -1,6 +1,8 @@
 package com.db.web.service;
 
+import com.db.web.entity.Info;
 import com.db.web.entity.User;
+import com.db.web.mapper.InfoMapper;
 import com.db.web.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,6 +14,9 @@ import javax.annotation.Resource;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    InfoMapper infoMapper;
+
 
     // 插入用户
     private void insertUser(User user) {
@@ -58,8 +63,14 @@ public class UserServiceImpl implements UserService {
                  **********************创建医师信息表
                  */
             } else { // 创建病人波形数据表
-                String createSQL = "CREATE TABLE `wave_" + id + "` (`time` int, `value` varchar(255), PRIMARY KEY (`time`))";
+                String createSQL = "CREATE TABLE `info_" + id
+                        + "` (`time` bigint(20),"
+                        + "`wave` varchar(2048),"
+                        + "`accel` varchar(2048),"
+                        + "PRIMARY KEY (`time`))";
                 jdbcTemplate.execute(createSQL);
+
+//                infoMapper.insertInfo(id.toString(), "0", "", "");
             }
             return 0; // 注册成功
         } else // 用户已存在

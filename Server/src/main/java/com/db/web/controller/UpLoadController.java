@@ -1,15 +1,12 @@
 package com.db.web.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.db.web.entity.Info;
 import com.db.web.entity.User;
-import com.db.web.entity.Wave;
 import com.db.web.service.UserService;
-import com.db.web.service.WaveService;
+import com.db.web.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class UpLoadController {
@@ -17,7 +14,7 @@ public class UpLoadController {
     @Autowired
     UserService userService;
     @Autowired
-    WaveService waveService;
+    InfoService infoService;
 
     // 上传请求
     @CrossOrigin(origins = "*")
@@ -44,13 +41,15 @@ public class UpLoadController {
                 back.put("success", "true");
 
                 // 解析JSON中的wave
-                JSONArray waveJSONArray = request.getJSONArray("wave");
-                List<Wave> waveList = waveJSONArray.toJavaList(Wave.class);
+                Info curr_info = request.getObject("info", Info.class);
+//                JSONArray waveJSONArray = request.getJSONArray("value");
+//                List<Wave> waveList = waveJSONArray.toJavaList(Wave.class);
 
                 // 插入数据
-                for (Wave curr_wave : waveList) {
-                    waveService.insertWave(curr_id, curr_wave);
-                }
+                infoService.insertInfo(curr_id, curr_info);
+//                for (Wave curr_wave : waveList) {
+//                    infoService.insertWave(curr_id, curr_wave);
+//                }
             }
         }
 

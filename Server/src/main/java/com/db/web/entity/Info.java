@@ -6,7 +6,8 @@ import javax.persistence.Entity;
 
 @Data
 @Entity
-public class Wave {
+public class Info {
     private Long time;
     private String wave;
+    private String accel;
 }

@@ -5,9 +5,8 @@
 package com.db.web.controller;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.db.web.entity.Wave;
-import com.db.web.service.WaveService;
+import com.db.web.service.InfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,16 +16,16 @@ import java.util.List;
 public class ConstantControler {
 
     @Autowired
-    WaveService waveService;
+    InfoService infoService;
 
     // 实时请求
     @CrossOrigin(origins = "*")
-    @GetMapping(value = "/constantRequest", params = {"id", "prevTime"})
-    public String constantRequest(@RequestParam(value = "id") String id,
-                                  @RequestParam(value = "prevTime") String prevTime) {
+    @GetMapping(value = "/constantWaveRequest", params = {"id", "prevTime"})
+    public String constantWaveRequest(@RequestParam(value = "id") String id,
+                                      @RequestParam(value = "prevTime") String prevTime) {
         JSONArray waveJSONArray = new JSONArray();
 
-        List<Wave> waveList = waveService.selectWave_timeAfter(id, prevTime);
+        List<Wave> waveList = infoService.selectWave_timeAfter(id, prevTime);
 
         // List<Wave>转JSONArray
         waveJSONArray.addAll(waveList);
