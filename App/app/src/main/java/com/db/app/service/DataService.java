@@ -154,6 +154,7 @@ public class DataService extends Service {
             Info currInfo = new Info(new Date().getTime(), waveArray.toString(), accelArray.toString());
             MyApplication myApplication = ((MyApplication) (getApplication()));
             myApplication.setCurrInfo(currInfo);
+            Log.d(TAG_DATASERVICE, "全局currInfo" + currInfo.toString());
 
             // 重置状态计数
             numWaveArray = 0;
