@@ -11,9 +11,10 @@ curs = exec(db, 'select * from data1');
 curs = fetch(curs)  ;
 ress = curs.Data;  
 ress = cell2mat(ress);  
-ress = ress(:,2); % 4100:95527
+ress = ress(:,2)+1125000; % 4100:95527
 % length(ress)
 % plot(ress)
+% return
 
 
 

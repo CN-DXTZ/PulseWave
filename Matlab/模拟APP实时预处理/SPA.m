@@ -5,18 +5,18 @@ clc; clear;close all;
 % data = data(:);
 
 A = textread('app4.txt');
-data = -(A(4000:9000)');
-n = 0:1/200:(length(data)-1)/200;
+data = -(A');
 
 N = length(data);
+n = 0:1/200:(N-1)/200;
 
-lambda = 2500;
+lambda = 10000;
 
 I = speye(N);
 
 D2 = spdiags(ones(N-2,1)*[1 -2 1], [0 1 2], N-2, N);
 
-trend = inv(I+lambda^2*D2'*D2)*data;
+    trend = inv(I+lambda^2*(D2'*D2))*data;
 
 detrenddata = data-trend;
 subplot(211);
