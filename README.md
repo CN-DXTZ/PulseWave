@@ -3,7 +3,8 @@
 
 该项目的主体目前主要包括：
 1. 基于 STC12 的硬件数据采集和传输
-1. 基于 Android APP 的数据显示和传输
-1. 基于 SpringBoot+MySQL 的后端数据及简单的前端数据显示及管理
-1. 基于 Matlab 的数据预处理
-1. 基于 Python 的数据处理
+1. 基于 Android APP 的数据预处理，显示，存储和传输
+1. 基于 SpringBoot+MySQL 的服务器后端
+1. 基于 Matlab 的数据预处理实验测试
+1. 基于 Python 的数据处理实验测试
+1. 基于 JavaScript 的上位机web数据显示（他人完成）
