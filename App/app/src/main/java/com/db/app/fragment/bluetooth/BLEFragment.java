@@ -33,7 +33,6 @@ public class BLEFragment extends Fragment {
     private boolean mConnecting;
     private Button bt_bleCollect;
     private boolean mCollecting;
-    private Button bt_bleRealTime;
 
     private BLEScanService mBLEScanService;
     private static Intent mIntent_BLECtrlService;
@@ -67,13 +66,11 @@ public class BLEFragment extends Fragment {
         linearView_BLEManger = getActivity().findViewById(R.id.BLEManger);
         bt_bleConnect = getActivity().findViewById(R.id.bleConnect);
         bt_bleCollect = getActivity().findViewById(R.id.bleStart);
-        bt_bleRealTime = getActivity().findViewById(R.id.bleRealTime);
 
         bt_bleScan.setOnClickListener(new mScanOnClickListener());
         listView_bleDevices.setOnItemClickListener(new mOnItemClickListener());
         bt_bleConnect.setOnClickListener(new mConnectOnClickListener());
         bt_bleCollect.setOnClickListener(new mCollectOnClickListener());
-        bt_bleRealTime.setOnClickListener(new mRealTimeOnClickListener());
     }
 
     /**
@@ -207,20 +204,6 @@ public class BLEFragment extends Fragment {
             mIntent_BLECtrlService.putExtra(BLEGattService.BLE_EXTRA_COMMAND, BLEGattService.COMMAND_DISCOLLECT);
         }
         getActivity().startService(mIntent_BLECtrlService);
-    }
-
-    /**
-     * 实时数据
-     */
-    private class mRealTimeOnClickListener implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            if (mConnecting) {
-                showToast("实时波形");
-            } else {
-                showToast("蓝牙未连接");
-            }
-        }
     }
 
 

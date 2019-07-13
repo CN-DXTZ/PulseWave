@@ -46,7 +46,7 @@
         <!-- 自定义蓝牙服务 -->
         <service android:name=".service.bluetoothService.BLEGattService" />
         <!-- 自定义数据服务 -->
-        <service android:name=".service.DataService" />
+        <service android:name=".service.dataService.DataService" />
     </application>
 
 </manifest>

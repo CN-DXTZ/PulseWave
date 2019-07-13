@@ -2,6 +2,7 @@ package com.db.app.service.httpService;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Service;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
@@ -31,7 +32,7 @@ public class HTTPService {
         JSONObject infoJson = new JSONObject();
         infoJson.put("time", myApplication.getCurrInfo().getTime());
         infoJson.put("wave", myApplication.getCurrInfo().getWave());
-        infoJson.put("accel", "");
+//        infoJson.put("accel", "");
         requestJson.put("info", infoJson);
 
         UploadHttpUtil.uploadRequest(requestJson.toJSONString());

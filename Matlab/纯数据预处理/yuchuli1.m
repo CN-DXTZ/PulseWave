@@ -11,7 +11,7 @@ curs = exec(db, 'select * from data1');
 curs = fetch(curs)  ;
 ress = curs.Data;  
 ress = cell2mat(ress);  
-ress = ress(:,2)+1125000; % 4100:95527
+ress = ress(:,2); % 4100:95527
 % length(ress)
 % plot(ress)
 % return
@@ -26,7 +26,22 @@ haar = wden(yn,'modwtsqtwolog','s','mln',4,'haar');
 % % % 画全图
 figure;
 hold on
-plot(haar,'b')
+
+% set( gca ,'FontSize',20);
+% ylabel('振幅','FontSize',20)
+% xlabel('时间/s','FontSize',20)
+
+% % set( gca, 'YTick', [],'FontSize',16 );
+% % set(gca,'XLim',[0 length(haar)]);
+plot(1:0.005:length(haar)/200.0+1-0.005,haar,'b','linewidth',1)
+% return
+
+
+% plot(haar,'b')
+set( gca ,'FontSize',20);
+ylabel('振幅','FontSize',20)
+xlabel('时间/s','FontSize',20)
+
 % plot(haar,'Color',[1 1/2 0])
 % legend('Original','DWT')
 
@@ -44,8 +59,8 @@ for i=2:len-1
     end
 end
 % % % 画极值点
-plot(feamax(:,1),feamax(:,2),'y.','markersize',10)
-plot(feamin(:,1),feamin(:,2),'g.','markersize',10) 
+plot(feamax(:,1)/200.0+1-0.005,feamax(:,2),'y.','markersize',20)
+plot(feamin(:,1)/200.0+1-0.005,feamin(:,2),'g.','markersize',20) 
 
 
 
@@ -93,8 +108,9 @@ for i=1:(size(feamax,1)-(feamax(1,1)<feamin(1,1)))
     end    
 end
 % % % 画初始对
-plot(fea1(:,1),fea1(:,2),'r.','markersize',15)
-plot(fea2(:,1),fea2(:,2),'k.','markersize',15)
+plot(fea1(:,1)/200.0+1-0.005,fea1(:,2),'r.','markersize',30)
+plot(fea2(:,1)/200.0+1-0.005,fea2(:,2),'k.','markersize',30)
+
 hold off
 
 
@@ -129,11 +145,30 @@ for i=1:size(fea1,1)-1
     end
 end
 
-% tt=wden(xm,'modwtsqtwolog','s','mln',2,'haar')./80;
+
 % % % 画拉直后的数据
+
+% xm(isnan(xm))=[];
+% tt=wden(xm,'modwtsqtwolog','s','mln',2,'haar');
+% tt=floor(movmean(tt,5));
+% tt=tt(38200:45700);
+% tt=tt-min(min(tt))+1001;
+% figure
+% plot(tt)
+
+
 figure
-tt=xm./80;
-plot(tt)
+hold on
+
+
+set( gca ,'FontSize',20);
+ylabel('振幅','FontSize',20)
+xlabel('时间/s','FontSize',20)
+
+plot(1:0.005:length(xm)/200.0+1-0.005,xm,'b','linewidth',2)
+% plot(xm)
+
+
 
 
 

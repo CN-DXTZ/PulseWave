@@ -12,7 +12,7 @@ import android.view.MenuItem;
 
 import com.db.app.MyApplication;
 import com.db.app.R;
-import com.db.app.fragment.history.HistoryFragment;
+import com.db.app.fragment.information.InformationFragment;
 import com.db.app.fragment.bluetooth.BLEFragment;
 import com.db.app.fragment.profile.ProfileFragment;
 import com.db.app.service.SharedPreferencesService;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             if (position == 0) {
                 return new BLEFragment();
             } else if (position == 1) {
-                return new HistoryFragment();
+                return new InformationFragment();
             } else {
                 return new ProfileFragment();
             }

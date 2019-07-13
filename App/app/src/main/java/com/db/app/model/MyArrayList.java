@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MyArrayList<E> extends ArrayList<E> {
+    public MyArrayList() {
+        super();
+    }
+
     public MyArrayList(int initialCapacity) {
         super(initialCapacity);
     }
 
-    // 去掉原ArrayList的toString的空格
+    // 去掉原ArrayList的toString的空格节约存储空间
     @Override
     public String toString() {
         Iterator<E> it = iterator();

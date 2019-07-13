@@ -1,7 +1,11 @@
 clc; clear;close all;
 
 % 数据1
-% A = textread('app4.txt');
+A = textread('app5.txt');
+plot(A)
+return 
+
+
 
 
 % 数据2
@@ -71,8 +75,8 @@ end
         if(currLimDotList(i,3)==currLimDotList(i-1,3))
             
             % (i)比(i-1)更极限
-            if ~xor(currLimDotList(i,1)>currLimDotList(i-1,1),...
-                    currLimDotList(i,3)>0)
+            if (currLimDotList(i,1)>currLimDotList(i-1,1) == ...
+                 currLimDotList(i,3)>0)
                 currLimDotList(i-1,:)=[];
             else
                 currLimDotList(i,:)=[];
@@ -103,16 +107,17 @@ if currLimDotList(1,3)==2
 end
    
 
-i=1;
-while i<size(currLimDotList,1)
-
-end  
+% i=1;
+% while i<size(currLimDotList,1)
+% 
+% end  
 
 
 
 %%
 figure,plot(currPreprocessWave);
 hold on;
+plot(movmean(currPreprocessWave,5))
 plot(currLimDotList(:,2),currLimDotList(:,1),'r.','markersize',15);
 
 % aa=currLimDotList(:,2);

@@ -17,7 +17,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.db.app.service.DataService;
+import com.db.app.service.dataService.DataService;
 
 import java.util.UUID;
 
@@ -222,7 +222,7 @@ public class BLEGattService extends Service {
             mIntent_DataService.putExtra(DataService.DATA_EXTRA_COMMAND,
                     DataService.COMMAND_RECEIVE_PROCESS); // 发给DataService命令：对接收的字节数组进行处理
             mIntent_DataService.putExtra(DataService.DATA_RECEIVE_BYTE_ARRAY,
-                    receive);  // 发给接收的字节数组
+                    receive);  // 发给DataService接收的字节数组
             startService(mIntent_DataService);
         }
 

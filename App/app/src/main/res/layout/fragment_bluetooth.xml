@@ -12,7 +12,7 @@
         android:layout_marginHorizontal="@dimen/horizontal"
         android:layout_marginVertical="@dimen/vertical"
         android:text="@string/bleScan"
-        android:textSize="@dimen/buttonTextSize" />
+        android:textSize="@dimen/firstTextSize" />
 
     <ListView
         android:id="@+id/bleDevices"
@@ -36,7 +36,7 @@
             android:layout_marginHorizontal="@dimen/horizontal"
             android:layout_marginVertical="@dimen/vertical"
             android:text="@string/bleConnect"
-            android:textSize="@dimen/buttonTextSize" />
+            android:textSize="@dimen/firstTextSize" />
 
         <Button
             android:id="@+id/bleStart"
@@ -45,16 +45,7 @@
             android:layout_marginHorizontal="@dimen/horizontal"
             android:layout_marginVertical="@dimen/vertical"
             android:text="@string/bleCollect"
-            android:textSize="@dimen/buttonTextSize" />
-
-        <Button
-            android:id="@+id/bleRealTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/horizontal"
-            android:layout_marginVertical="@dimen/vertical"
-            android:text="@string/bleRealTime"
-            android:textSize="@dimen/buttonTextSize" />
+            android:textSize="@dimen/firstTextSize" />
 
     </LinearLayout>
 

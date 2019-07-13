@@ -8,7 +8,9 @@ xTrain=zeros(len,200);
 yTrain=zeros(len,1);
 threshold=[41, 237];
 flag=0.0;
-
+set( gca ,'FontSize',20);
+ylabel('振幅','FontSize',20)
+xlabel('时间/s','FontSize',20)
 % for i=1:len
 for i=[10,11,12,156,157,158,255,256,257] 
     
@@ -20,7 +22,7 @@ for i=[10,11,12,156,157,158,255,256,257]
 
 %     figure
     hold on
-    axis([0 180 -10 180]) 
+    axis([0 1 -10 180]) 
     p=find(xSpilit(i,:)==0,1)-1;
     xi=xSpilit(i,1:p);
     haar = wden(xi,'modwtsqtwolog','s','mln',3,'haar');
@@ -36,12 +38,13 @@ for i=[10,11,12,156,157,158,255,256,257]
 %     elseif flag==2
 %         plot(haar,'--b')
 %     end
+    xxxx=0:0.005:length(haar)/200.0-0.005;
     if i<40
-        p1=plot(haar,'-k','linewidth',1.5);
+        p1=plot(xxxx,haar,'-k','linewidth',1.5);
     elseif i<237
-        p2=plot(haar,'-xr','linewidth',1.5);
+        p2=plot(xxxx,haar,'-xr','linewidth',1.5);
     else
-        p3=plot(haar,'--b','linewidth',1.5);
+        p3=plot(xxxx,haar,'--b','linewidth',1.5);
     end
 end
 legend([p1,p2,p3],'平稳','运动','休息')

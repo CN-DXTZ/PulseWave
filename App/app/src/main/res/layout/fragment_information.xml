@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/ccc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingHorizontal="@dimen/horizontal"
+        android:paddingVertical="@dimen/vertical"
+        android:text="          实时脉搏波波形图"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/firstTextSize" />
+
+    <com.db.app.view.EcgView
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <TextView
+        android:id="@+id/aaa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingHorizontal="@dimen/horizontal"
+        android:paddingVertical="@dimen/vertical"
+        android:text="心率：                        71 BPM"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/firstTextSize" />
+
+    <TextView
+        android:id="@+id/bbb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingHorizontal="@dimen/horizontal"
+        android:paddingVertical="@dimen/vertical"
+        android:text="风险等级：                          低"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/firstTextSize" />
+
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/curve"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:paddingHorizontal="16dp">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_curveTitle"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerHorizontal="true"-->
+    <!--android:padding="12dp"-->
+    <!--android:text="实时脉搏波"-->
+    <!--android:textAppearance="?android:textAppearanceMedium"-->
+    <!--android:textSize="@dimen/firstTextSize"-->
+    <!--android:textStyle="bold" />-->
+
+    <!--<com.db.app.curve.CurveBackgroundView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="240dp"-->
+    <!--android:layout_below="@+id/tv_curveTitle"-->
+    <!--android:layout_centerInParent="true" />-->
+
+    <!--<com.db.app.curve.CurvePathView-->
+    <!--android:id="@+id/cpv"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="240dp"-->
+    <!--android:layout_below="@+id/tv_curveTitle"-->
+    <!--android:layout_centerHorizontal="true" />-->
+
+    <!--</RelativeLayout>-->
+
+    <!--<Button-->
+    <!--android:id="@+id/upload"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="历史数据" />-->
+
+    <!--<Button-->
+    <!--android:id="@+id/download"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="下载" />-->
+
+</LinearLayout>
